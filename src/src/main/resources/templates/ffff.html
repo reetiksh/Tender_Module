@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Maintenance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin: 50px auto;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        td {
+            background-color: #fff;
+        }
+        td.actions {
+            white-space: nowrap;
+        }
+        a.button {
+            text-decoration: none;
+            color: #007bff;
+            margin-right: 10px;
+        }
+        button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: #007bff;
+            font-size: inherit;
+        }
+        button:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div th:switch="${users}" class="container">
+    <div>
+        <h2 th:case="null">No Maintenance yet!</h2>
+        <div th:case="*">
+            <h2>Maintenance List (Admin)</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Ticket No.</th>
+                    <th>Report Date</th>
+                    <th>Due Date</th>
+                    <th>Asset Name</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                    <th>Assigned to</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="emp: ${users}">
+                    <td th:text="${emp.ticketNo}"></td>
+                    <td th:text="${emp.publishDate}"></td>
+                    <td th:text="${emp.dueDate}"></td>
+                    <td th:text="${emp.nameOfAsset}"></td>
+                    <td th:text="${emp.status}"></td>
+                    <td th:text="${emp.remarks}"></td>
+                    <td th:text="${emp.assignedTo}"></td>
+                    <td class="actions">
+                        <a th:href="@{'/AdminEdit/' + ${emp.id}}" class="button">Assign/Edit</a>
+                        <form th:action="@{'/Admindelete/' + ${emp.id}}" method="post" style="display: inline-block;">
+                            <button type="submit" class="button">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

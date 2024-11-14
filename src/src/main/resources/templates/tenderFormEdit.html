@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Enter Tender Details</title>
+  <!-- Include Bootstrap CSS for layout -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .form-group {
+        margin-bottom: 1.5rem; /* Additional space between rows */
+    }
+
+<!--        /* Initially hide all form rows */-->
+<!--        .form-row {-->
+<!--            display: none;-->
+<!--        }-->
+  </style>
+</head>
+<body layout:fragment="content">
+<div class="container">
+  <h2 class="mt-5">Enter Tender Details</h2>
+  <form action="#" th:action="@{/saveTenderNew}" method="post" th:object="${user}" class="p-3" enctype="multipart/form-data">
+    <!-- Eligibility and Search Date -->
+    <div class="form-row mb-3 ">
+      <div class="form-group col-md-5" id="eligibilityRow" >
+        <label for="eligibility">Eligibility:</label>
+        <select id="eligibility" th:field="*{eligibility}" name="eligibility" class="form-control">
+          <option value="1">Eligible</option>
+          <option value="0">Not Eligible</option>
+        </select>
+      </div>
+      <!-- Search Date -->
+      <div class="form-group col-md-5 ml-auto" id="searchDateRow">
+        <label for="searchDate">Search Date:</label>
+        <input type="hidden" th:field="*{id}" class="form-control" id="id" name="id">
+        <input type="date" th:field="*{searchDate}" class="form-control" id="searchDate" name="searchDate">
+      </div>
+    </div>
+
+    <!-- Bid Publish Date and Submission Date and Time -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="bidPublishDateRow">
+        <label for="bidPublishDate">Bid Publish Date:</label>
+        <input type="date" th:field="*{bidPublishDate}"  class="form-control" id="bidPublishDate" name="bidPublishDate">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="submissionDateAndTimeRow">
+        <label for="submissionDateAndTime">Submission Date and Time:</label>
+        <input type="datetime-local" th:field="*{submissionDateAndTime}" class="form-control" id="submissionDateAndTime" name="submissionDateAndTime">
+      </div>
+    </div>
+
+    <!-- Extended Date & Time and Participating Month -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="extendedDateAndTimeRow">
+        <label for="extendedDateAndTime">Extended Date & Time:</label>
+        <input type="datetime-local" class="form-control" th:field="*{extendedDateAndTime}" id="extendedDateAndTime" name="extendedDateAndTime">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="participatingMonthRow">
+        <label for="participatingMonth">Participating Month:</label>
+        <select class="form-control" th:field="*{participatingMonth}" id="participatingMonth" name="participatingMonth">
+          <option value="">Select Month</option>
+          <!-- Add month options -->
+        </select>
+      </div>
+    </div>
+
+    <!-- Submission Type and Bid Validity -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="submissionTypeRow">
+        <label for="submissionType">Submission Type:</label>
+        <select id="submissionType" th:field="*{submissionType}" name="submissionType" class="form-control">
+          <option value="">Select Submission Type</option>
+          <option value="offline">Offline</option>
+          <option value="online">Online</option>
+        </select>
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="bidValidityRow">
+        <label for="bidValidity">Bid Validity:</label>
+        <input type="date"   th:field="*{bidValidity}" class="form-control" id="bidValidity" name="bidValidity">
+      </div>
+    </div>
+
+    <!-- MSE Preference and Tender Source -->
+    <div class="form-row mb-3">
+      <div class="form-group col-md-5"  id="msePreferenceRow">
+        <label for="msePreference">MSE Preference:</label>
+        <select id="msePreference" name="msePreference"  th:field="*{msePreference}"  class="form-control">
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="tenderSourceRow">
+        <label for="tenderSource">Tender Source:</label>
+        <input type="text" class="form-control" th:field="*{tenderSource}"  id="tenderSource" name="tenderSource">
+      </div>
+    </div>
+
+    <!-- Tender Reference No and Organization -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="tenderReferenceNumberRow">
+        <label for="tenderReferenceNumber">Tender Reference No:</label>
+        <input type="text" class="form-control" th:field="*{tenderReferenceNumber}"  id="tenderReferenceNumber" name="tenderReferenceNumber">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="organizationRow">
+        <label for="organization">Organization:</label>
+        <input type="text" class="form-control" th:field="*{organization}"  id="organization" name="organization">
+      </div>
+    </div>
+
+    <!-- Sector and Zone -->
+    <div class="form-row mb-3">
+      <div class="form-group col-md-5" id="sectorRow">
+        <label for="sector">Sector:</label>
+        <input type="text" class="form-control" th:field="*{sector}"  id="sector" name="sector">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="zoneRow">
+        <label for="zone">Zone:</label>
+        <input type="text" class="form-control"  th:field="*{zone}"   id="zone" name="zone">
+      </div>
+    </div>
+
+    <!-- Division and Department -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="divisionRow">
+        <label for="division">Division:</label>
+        <input type="text" class="form-control"  th:field="*{division}"   id="division" name="division">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="departmentRow">
+        <label for="department">Department:</label>
+        <input type="text" class="form-control"  th:field="*{department}"  id="department" name="department">
+      </div>
+    </div>
+
+    <!-- Client Name and Client Location -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="clientNameRow">
+        <label for="clientName">Client Name:</label>
+        <input type="text" class="form-control"  th:field="*{clientName}"   id="clientName" name="clientName">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="clientLocationRow">
+        <label for="clientLocation">Client Location:</label>
+        <input type="text" class="form-control" th:field="*{clientLocation}" id="clientLocation" name="clientLocation">
+      </div>
+    </div>
+
+    <!-- Client Address and State -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="clientAddressRow">
+        <label for="clientAddress">Client Address:</label>
+        <input type="text" class="form-control"  th:field="*{clientAddress}"  id="clientAddress" name="clientAddress">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="stateRow">
+        <label for="state">State:</label>
+        <input type="text" class="form-control" th:field="*{state}" id="state" name="state">
+      </div>
+    </div>
+
+    <!-- Operational Branch and Scope of Work -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="operationalBranchRow">
+        <label for="operationalBranch">Operational Branch:</label>
+        <input type="text" class="form-control" th:field="*{operationalBranch}"  id="operationalBranch" name="operationalBranch">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="scopeOfWorkRow">
+        <label for="scopeOfWork">Scope of Work:</label>
+        <input type="text" class="form-control" th:field="*{scopeOfWork}"  id="scopeOfWork" name="scopeOfWork">
+      </div>
+    </div>
+
+    <!-- Nature of Work and Similar Nature -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="natureOfWorkRow">
+        <label for="natureOfWork">Nature of Work:</label>
+        <input type="text" class="form-control" th:field="*{natureOfWork}" id="natureOfWork" name="natureOfWork">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="similarNatureRow">
+        <label for="similarNature">Similar Nature:</label>
+        <input type="text" class="form-control" th:field="*{similarNature}" id="similarNature" name="similarNature">
+      </div>
+    </div>
+
+    <!-- Period and Tender Value -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="periodRow">
+        <label for="period">Period:</label>
+        <input type="text" class="form-control" th:field="*{period}" id="period" name="period">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="tenderValueRow">
+        <label for="tenderValue">Tender Value:</label>
+        <input type="number" class="form-control" th:field="*{tenderValue}" id="tenderValue" name="tenderValue">
+      </div>
+    </div>
+
+    <!-- Value Per Day and Value Per Day in Lacs -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="valuePerDayRow">
+        <label for="perDay">Value Per Day:</label>
+        <input type="number" class="form-control" th:field="*{perDay}" id="perDay" name="perDay">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="PerDayLacsRow">
+        <label for="perDayInLac">Value Per Day in Lacs:</label>
+        <input type="number" class="form-control" th:field="*{perDayInLac}"id="perDayInLac" name="perDayInLac">
+      </div>
+    </div>
+
+    <!-- Tender Fees Section -->
+    <h4 class="mt-4" id="tenderFeesHeader">Tender Fees</h4>
+    <!-- Amount and Exempted for us -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="tenderAmountRow">
+        <label for="tenderAmount">Amount:</label>
+        <input type="number" class="form-control" th:field="*{tenderAmount}" id="tenderAmount" name="tenderAmount">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="tenderExemptedOfUsRow">
+        <label for="tenderExemptedOfUs">Exempted for us:</label>
+        <select id="tenderExemptedOfUs" name="tenderExemptedOfUs" th:field="*{tenderExemptedOfUs}"class="form-control">
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Mode of Payment for Tender Fees -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="tenderModeOFPaymentRow">
+        <label for="tenderModeOFPayment">Mode of Payment:</label>
+        <select id="tenderModeOFPayment" name="tenderModeOFPayment" th:field="*{tenderModeOFPayment}" class="form-control" onchange="toggleTenderFeePaymentFields()">
+          <option value="">Select Mode</option>
+          <option value="fdr">FDR/DD/BG</option>
+          <option value="paymentGateway">Payment Gateway</option>
+          <option value="rtgs">RTGS/NEFT/IMPS</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Conditional Fields for Tender Fees -->
+    <div id="tenderFeePaymentFields" class="mb-3">
+      <!-- FDR/DD/BG Fields -->
+      <div id="fdrFields" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="tenderInFavourOFRow">
+            <label for="tenderInFavourOF">In Favour Of:</label>
+            <input type="text" class="form-control" id="tenderInFavourOF"  th:field="*{tenderInFavourOF}" name="tenderInFavourOF">
+          </div>
+          <div class="form-group col-md-5 ml-auto" id="tenderPayableAtRow">
+            <label for="tenderPayableAt">Payable At:</label>
+            <input type="text" class="form-control" id="tenderPayableAt"  th:field="*{tenderPayableAt}" name="tenderPayableAt">
+          </div>
+        </div>
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="tenderValidityRow">
+            <label for="tenderValidity">Validity:</label>
+            <input type="date" class="form-control" id="tenderValidity"  th:field="*{tenderValidity}"  name="tenderValidity">
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Gateway Field -->
+      <div id="paymentGatewayField" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" id="tenderPortalNameRow">
+          <div class="form-group col-md-5">
+            <label for="tenderPortalName">Portal Name:</label>
+            <input type="text" class="form-control" id="tenderPortalName" th:field="*{tenderPortalName}" name="tenderPortalName">
+          </div>
+        </div>
+      </div>
+
+      <!-- RTGS/NEFT/IMPS Fields -->
+      <div id="tendertgsFieldsAC" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="tenderAccountDetailACNoRow">
+            <label for="tenderAccountDetailACNo">Account Details (A/C No):</label>
+            <input type="text" class="form-control" th:field="*{tenderAccountDetailACNo}" id="tenderAccountDetailACNo" name="tenderAccountDetailACNo">
+          </div>
+        </div>
+      </div>
+      <div id="tenderrtgsFieldsIFSC" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" id="tenderAccountDetailIFSCRow">
+          <div class="form-group col-md-5">
+            <label for="tenderAccountDetailIFSC">Account Details (IFSC):</label>
+            <input type="text" class="form-control" th:field="*{tenderAccountDetailIFSC}" id="tenderAccountDetailIFSC" name="tenderAccountDetailIFSC">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing Fees Section -->
+    <h4 class="mt-4" id="processingFeesHeader">Processing Fees</h4>
+    <!-- Amount and Exempted for us -->
+    <div class="form-row mb-3">
+      <div class="form-group col-md-5" id="processingAmountRow">
+        <label for="processingAmount">Amount:</label>
+        <input type="number" class="form-control" th:field="*{processingAmount}" id="processingAmount" name="processingAmount">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="processingExemptedOfUsRow">
+        <label for="processingExemptedOfUs">Exempted for us:</label>
+        <select id="processingExemptedOfUs" th:field="*{processingExemptedOfUs}" name="processingExemptedOfUs" class="form-control">
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Mode of Payment for Processing Fees -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="processingModeOFPaymentRow">
+        <label for="processingModeOFPayment">Mode of Payment:</label>
+        <select id="processingModeOFPayment" th:field="*{processingModeOFPayment}" name="processingModeOFPayment" class="form-control" onchange="toggleProcessingFeePaymentFields()">
+          <option value="">Select Mode</option>
+          <option value="fdr">FDR/DD/BG</option>
+          <option value="paymentGateway">Payment Gateway</option>
+          <option value="rtgs">RTGS/NEFT/IMPS</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Conditional Fields for Processing Fees -->
+    <div id="processingFeePaymentFields" class="mb-3">
+      <!-- FDR/DD/BG Fields -->
+      <div id="processingfdrFields" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="processingInFavourOFRow">
+            <label for="processingInFavourOF">In Favour Of:</label>
+            <input type="text" class="form-control" th:field="*{processingInFavourOF}" id="processingInFavourOF" name="processingInFavourOF">
+          </div>
+          <div class="form-group col-md-5 ml-auto" id="processingPayableAtRow">
+            <label for="processingPayableAt">Payable At:</label>
+            <input type="text" class="form-control" th:field="*{processingPayableAt}" id="processingPayableAt" name="processingPayableAt">
+          </div>
+        </div>
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="processingPalidityRow">
+            <label for="processingPalidity">Validity:</label>
+            <input type="text" class="form-control" th:field="*{processingPalidity}" id="processingPalidity" name="processingPalidity">
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Gateway Field -->
+      <div id="processingpaymentGatewayField" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="processingPortalNameRow">
+            <label for="processingPortalName">Portal Name:</label>
+            <input type="text" class="form-control" th:field="*{processingPortalName}" id="processingPortalName" name="processingPortalName">
+          </div>
+        </div>
+      </div>
+
+      <!-- RTGS/NEFT/IMPS Fields -->
+      <div id="processingrtgsFieldsAC" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="processingAccountDetailACNoRow">
+            <label for="processingAccountDetailACNo">Account Details (A/C No):</label>
+            <input type="text" class="form-control" th:field="*{processingAccountDetailACNo}" id="processingAccountDetailACNo" name="processingAccountDetailACNo">
+          </div>
+        </div>
+      </div>
+      <div id="processingrtgsFieldsIFSC" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="processingAccountDetailIFSCRow">
+            <label for="processingAccountDetailIFSC">Account Details (IFSC):</label>
+            <input type="text" class="form-control" th:field="*{processingAccountDetailIFSC}" id="processingAccountDetailIFSC" name="processingAccountDetailIFSC">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMD Section -->
+    <h4 class="mt-4" id="emdHeader">EMD</h4>
+    <!-- Amount and Exempted for us -->
+    <div class="form-row mb-3">
+      <div class="form-group col-md-5"  id="emdAmountRow">
+        <label for="emdAmount">Amount:</label>
+        <input type="number" class="form-control" th:field="*{emdAmount}" id="emdAmount" name="emdAmount">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="emdExemptedOfUsRow">
+        <label for="emdExemptedOfUs">Exempted for us:</label>
+        <select id="emdExemptedOfUs" name="emdExemptedOfUs" th:field="*{emdExemptedOfUs}" class="form-control">
+          <option value="">Select</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Mode of Payment for EMD -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="emdModeOFPaymentRow">
+        <label for="emdModeOFPayment">Mode of Payment:</label>
+        <select id="emdModeOFPayment" name="emdModeOFPayment" th:field="*{emdModeOFPayment}" class="form-control" onchange="toggleEmdPaymentFields()">
+          <option value="">Select Mode</option>
+          <option value="fdr">FDR/DD/BG</option>
+          <option value="paymentGateway">Payment Gateway</option>
+          <option value="rtgs">RTGS/NEFT/IMPS</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Conditional Fields for EMD -->
+    <div id="emdPaymentFields" class="mb-3">
+      <!-- FDR/DD/BG Fields -->
+      <div id="EmdfdrFields" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="emdInFavourOFRow">
+            <label for="emdInFavourOF">In Favour Of:</label>
+            <input type="text" class="form-control" th:field="*{emdInFavourOF}" id="emdInFavourOF" name="emdInFavourOF">
+          </div>
+          <div class="form-group col-md-5 ml-auto" id="emdPayableAtRow">
+            <label for="emdPayableAt">Payable At:</label>
+            <input type="text" class="form-control" th:field="*{emdPayableAt}" id="emdPayableAt" name="emdPayableAt">
+          </div>
+        </div>
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="emdValidityRow">
+            <label for="emdValidity">Validity:</label>
+            <input type="text" class="form-control" th:field="*{emdValidity}" id="emdValidity" name="emdValidity">
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Gateway Field -->
+      <div id="EMDpaymentGatewayField" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="emdPortalNameRow">
+            <label for="emdPortalName">Portal Name:</label>
+            <input type="text" class="form-control" th:field="*{emdPortalName}" id="emdPortalName" name="emdPortalName">
+          </div>
+        </div>
+      </div>
+
+      <!-- RTGS/NEFT/IMPS Fields -->
+      <div id="EMDtgsFieldsAC" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="emdAccountDetailACNoRow">
+            <label for="emdAccountDetailACNo">Account Details (A/C No):</label>
+            <input type="text" class="form-control" th:field="*{emdAccountDetailACNo}" id="emdAccountDetailACNo" name="emdAccountDetailACNo">
+          </div>
+        </div>
+      </div>
+      <div id="EMDrtgsFieldsIFSC" class="conditional-field" style="display:none;">
+        <div class="form-row mb-3" >
+          <div class="form-group col-md-5" id="emdAccountDetailIFSCRow">
+            <label for="emdAccountDetailIFSC">Account Details (IFSC):</label>
+            <input type="text" class="form-control" th:field="*{emdAccountDetailIFSC}" id="emdAccountDetailIFSC" name="emdAccountDetailIFSC">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Based On, Area, Penalty Clause -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5"  id="basedOnAreaRow">
+        <label for="basedOn">Based On:</label>
+        <input type="text" class="form-control" th:field="*{basedOn}" id="basedOn" name="basedOn">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="AreaRow">
+        <label for="Area">Area (in Sq ft):</label>
+        <input type="number" class="form-control" th:field="*{Area}" id="Area" name="Area">
+      </div>
+    </div>
+
+    <!-- Penalty Clause -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="penaltyClauseRow">
+        <label for="penaltyClause">Penalty Clause:</label>
+        <input type="text" class="form-control" th:field="*{penaltyClause}" id="penaltyClause" name="penaltyClause">
+      </div>
+    </div>
+
+    <!-- In Case of Multiple L1 Selection based on, PBG (%) -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="sectionBasedOnRow">
+        <label for="sectionBasedOn">In Case of Multiple L1 Selection based on:</label>
+        <input type="text" class="form-control" th:field="*{sectionBasedOn}" id="sectionBasedOn" name="sectionBasedOn">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="PBGRow">
+        <label for="PBG">PBG (%):</label>
+        <input type="number" class="form-control" th:field="*{PBG}" id="PBG" name="PBG">
+      </div>
+    </div>
+
+    <!-- Rates Quoted in and Service Charge (%) -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="ratesQuotedInRow">
+        <label for="ratesQuotedIn">Rates Quoted in:</label>
+        <select id="ratesQuotedIn" th:field="*{ratesQuotedIn}" name="ratesQuotedIn" class="form-control">
+          <option value="">Select</option>
+          <!-- Add options from Master data -->
+          <option value="serviceCharge">Service Charge</option>
+          <!-- Other options -->
+        </select>
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="serviceChargeRow">
+        <label for="serviceCharge">Service Charge (%):</label>
+        <input type="number" th:field="*{serviceCharge}" class="form-control" id="serviceCharge" name="serviceCharge">
+      </div>
+    </div>
+
+    <!-- Tender Contact Details -->
+    <h4 class="mt-4" id="tenderContactDetailsHeader">Tender Contact Details</h4>
+    <!-- Name, Email ID, Contact No. -->
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="tenderContactNameRow">
+        <label for="tenderContactName">Name:</label>
+        <input type="text" class="form-control" th:field="*{tenderContactName}" id="tenderContactName" name="tenderContactName">
+      </div>
+      <div class="form-group col-md-5 ml-auto" id="tenderContactEmailRow">
+        <label for="tenderContactEmail">Email ID:</label>
+        <input type="email" class="form-control" th:field="*{tenderContactEmail}" id="tenderContactEmail" name="tenderContactEmail">
+      </div>
+    </div>
+    <div class="form-row mb-3" >
+      <div class="form-group col-md-5" id="tenderContactContactRow">
+        <label for="tenderContactContact">Contact No.:</label>
+        <input type="text" class="form-control" th:field="*{tenderContactContact}" id="tenderContactContact" name="tenderContactContact">
+      </div>
+    </div>
+
+    <!-- Upload Section -->
+    <h4 class="mt-4" id="uploadHeader">Upload</h4>
+    <!-- Upload Tender Document, Check List, EMD Format, Annexures -->
+    <div class="form-group" id="tenderDocumentRow">
+      <label for="tenderDocument">Upload Tender Document:</label>
+      <input type="file" class="form-control-file" id="tenderDocument" name="tenderDocument">
+    </div>
+    <div class="form-group" id="checkListRow">
+      <label for="checkList">Upload Check List:</label>
+      <input type="file" class="form-control-file" id="checkList" name="checkList">
+    </div>
+    <div class="form-group" id="emdFormatRow">
+      <label for="emdFormat">Upload EMD Format:</label>
+      <input type="file" class="form-control-file" id="emdFormat" name="emdFormat">
+    </div>
+    <div class="form-group" id="annexuresRow">
+      <label for="annexures">Annexures:</label>
+      <input type="file" class="form-control-file" id="annexures" name="annexures">
+    </div>
+
+    <!-- Upload Supporting Documents -->
+    <div class="form-group" id="supportingDocsRow">
+      <label for="supportingDocs">Upload Supporting Documents:</label>
+      <input type="file" class="form-control-file" id="supportingDocs" name="supportingDocs" multiple />
+    </div>
+
+    <!-- Submit and Cancel buttons -->
+    <div class="row justify-content-center">
+      <button type="submit" class="btn btn-primary mr-2">Submit</button>
+      <button type="reset" class="btn btn-secondary">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<!-- JavaScript to handle component visibility -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      fetch('/api/component-visibility/entry')
+          .then(response => response.json())
+          .then(data => {
+              // data is an array of component objects
+              data.forEach(component => {
+                  const componentName = component.componentName;
+                  const isVisible = component.visible;
+
+                  // Assuming that each component row has an ID in the format componentName + 'Row'
+                  const element = document.getElementById(componentName + 'Row');
+                  if (element) {
+                      if (isVisible) {
+                          element.style.display = 'block'; // or 'block' depending on your layout
+                      } else {
+                          element.style.display = 'none';
+                      }
+                  }
+              });
+          })
+          .catch(error => console.error('Error fetching component visibility:', error));
+  });
+
+  // JavaScript functions to handle Mode of Payment field changes
+  function toggleTenderFeePaymentFields() {
+      const modeOfPayment = document.getElementById('tenderModeOFPayment').value;
+
+      // Get all the conditional fields
+      const fdrFields = document.getElementById('fdrFields');
+      const paymentGatewayField = document.getElementById('paymentGatewayField');
+      const rtgsFieldsAC = document.getElementById('tendertgsFieldsAC');
+      const rtgsFieldsIFSC = document.getElementById('tenderrtgsFieldsIFSC');
+
+      // Hide all conditional fields
+      fdrFields.style.display = 'none';
+      paymentGatewayField.style.display = 'none';
+      rtgsFieldsAC.style.display = 'none';
+      rtgsFieldsIFSC.style.display = 'none';
+
+      // Show the appropriate fields based on the selected mode of payment
+      if (modeOfPayment === 'fdr') {
+          fdrFields.style.display = 'block';
+      } else if (modeOfPayment === 'paymentGateway') {
+          paymentGatewayField.style.display = 'block';
+      } else if (modeOfPayment === 'rtgs') {
+          rtgsFieldsAC.style.display = 'block';
+          rtgsFieldsIFSC.style.display = 'block';
+      }
+  }
+
+  function toggleProcessingFeePaymentFields() {
+      const modeOfPayment = document.getElementById('processingModeOFPayment').value;
+
+      // Get all the conditional fields
+      const fdrFields = document.getElementById('processingfdrFields');
+      const paymentGatewayField = document.getElementById('processingpaymentGatewayField');
+      const rtgsFieldsAC = document.getElementById('processingrtgsFieldsAC');
+      const rtgsFieldsIFSC = document.getElementById('processingrtgsFieldsIFSC');
+
+      // Hide all conditional fields
+      fdrFields.style.display = 'none';
+      paymentGatewayField.style.display = 'none';
+      rtgsFieldsAC.style.display = 'none';
+      rtgsFieldsIFSC.style.display = 'none';
+
+      // Show the appropriate fields based on the selected mode of payment
+      if (modeOfPayment === 'fdr') {
+          fdrFields.style.display = 'block';
+      } else if (modeOfPayment === 'paymentGateway') {
+          paymentGatewayField.style.display = 'block';
+      } else if (modeOfPayment === 'rtgs') {
+          rtgsFieldsAC.style.display = 'block';
+          rtgsFieldsIFSC.style.display = 'block';
+      }
+  }
+
+  function toggleEmdPaymentFields() {
+      const modeOfPayment = document.getElementById('emdModeOFPayment').value;
+
+      // Get all the conditional fields
+      const fdrFields = document.getElementById('EmdfdrFields');
+      const paymentGatewayField = document.getElementById('EMDpaymentGatewayField');
+      const rtgsFieldsAC = document.getElementById('EMDtgsFieldsAC');
+      const rtgsFieldsIFSC = document.getElementById('EMDrtgsFieldsIFSC');
+
+      // Hide all conditional fields
+      fdrFields.style.display = 'none';
+      paymentGatewayField.style.display = 'none';
+      rtgsFieldsAC.style.display = 'none';
+      rtgsFieldsIFSC.style.display = 'none';
+
+      // Show the appropriate fields based on the selected mode of payment
+      if (modeOfPayment === 'fdr') {
+          fdrFields.style.display = 'block';
+      } else if (modeOfPayment === 'paymentGateway') {
+          paymentGatewayField.style.display = 'block';
+      } else if (modeOfPayment === 'rtgs') {
+          rtgsFieldsAC.style.display = 'block';
+          rtgsFieldsIFSC.style.display = 'block';
+      }
+  }
+</script>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

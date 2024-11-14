@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Maintenance</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div th:switch="${users}" class="container my-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 th:case="null">No Maintenance yet!</h2>
+            <div th:case="*">
+                <h2 class="my-5">Maintenance List</h2>
+                <table class="table table-dark">
+                    <thead>
+                    <tr>
+                        <th>Report Date</th>
+                        <th>Due Date</th>
+                        <th>Nature of work</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="emp: ${users}">
+                        <td th:text="${emp.publishDate}"></td>
+                        <td th:text="${emp.dueDate}"></td>
+                        <td th:text="${emp.nameOfAsset}"></td>
+                        <td>
+                            <a th:href="@{'/edit/' + ${emp.id}}"><button>Edit</button></a>
+                            <form th:action="@{'/delete/' + ${emp.id}}" method="post">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="my-5"><a href="/MaintEntry" class="btn btn-primary"><i class="fas fa-user-plus ml-2"></i>Add Maintenance</a></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

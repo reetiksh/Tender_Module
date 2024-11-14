@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Allocation of Tender to Prepare</title>
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" th:href="@{assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{assets/plugins/fontawesome/css/fontawesome.min.css}">
+    <link rel="stylesheet" th:href="@{assets/plugins/fontawesome/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{assets/css/line-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{assets/css/material.css}">
+    <link rel="stylesheet" th:href="@{assets/css/select2.min.css}">
+    <link rel="stylesheet" th:href="@{assets/css/dataTables.bootstrap4.min.css}">
+    <link rel="stylesheet" th:href="@{assets/css/style.css}">
+    <link rel="stylesheet" th:href="@{assets/css/bootstrap-datetimepicker.min.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body layout:fragment="content">
+
+<h1>Allocation of Tender to Prepare</h1>
+<div class="container mt-5">
+    <!-- Success Message -->
+    <div th:if="${param.success}" class="alert alert-success" role="alert">
+        Data saved successfully!
+    </div>
+
+    <!-- Tender Preparation Form -->
+    <form th:action="@{/tender/prepare}" th:object="${user}" method="post" class="needs-validation">
+        <input type="hidden" class="form-control" id="tenderNumber" name="tenderNumber" required>
+
+        <!-- Checklist Prepared By Section -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="checklistPreparedBy">Checklist Prepared By:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="checklistPreparedBy" name="checklistPreparedBy" class="form-control" required />
+                <input type="hidden" id="checklistPreparedById" name="checklistPreparedById">
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="checklistPreparedByLastDate" name="checklistPreparedByLastDate" class="form-control" required />
+            </div>
+        </div>
+
+        <!-- Technical Prepared By Section -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="technicalPreparedBy">Technical Prepared By:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="technicalPreparedBy" name="technicalPreparedBy" class="form-control" required />
+                <input type="hidden" id="technicalPreparedById" name="technicalPreparedById">
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="technicalPreparedByLastDate" name="technicalPreparedByLastDate" class="form-control" required />
+            </div>
+        </div>
+
+        <!-- Financial Prepared By Section -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <label for="financialPreparedBy">Financial Prepared By:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="financialPreparedBy" name="financialPreparedBy" class="form-control" required />
+                <input type="hidden" id="financialPreparedById" name="financialPreparedById">
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="financialPreparedByLastDate" name="financialPreparedByLastDate" class="form-control" required />
+            </div>
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <div class="form-group row">
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <a th:href="@{'/tender/prepare'}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript for Autocomplete and Validation -->
+<script>
+    // Autocomplete for checklistPreparedBy
+    $("#checklistPreparedBy").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "/searchuserDetails",
+                data: { query: request.term },
+                success: function(data) {
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            $("#checklistPreparedBy").val(ui.item.label);
+            $("#checklistPreparedById").val(ui.item.value);
+            return false;
+        }
+    });
+
+    // Autocomplete for technicalPreparedBy
+    $("#technicalPreparedBy").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "/searchuserDetails",
+                data: { query: request.term },
+                success: function(data) {
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            $("#technicalPreparedBy").val(ui.item.label);
+            $("#technicalPreparedById").val(ui.item.value);
+            return false;
+        }
+    });
+
+    // Autocomplete for financialPreparedBy
+    $("#financialPreparedBy").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "/searchuserDetails",
+                data: { query: request.term },
+                success: function(data) {
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            $("#financialPreparedBy").val(ui.item.label);
+            $("#financialPreparedById").val(ui.item.value);
+            return false;
+        }
+    });
+
+    // Form validation for required date fields
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector("form").addEventListener("submit", function(event) {
+            let isValid = true;
+
+            // Check each date field for validity
+            const dateFields = ["#checklistPreparedByLastDate", "#technicalPreparedByLastDate", "#financialPreparedByLastDate"];
+            dateFields.forEach(function(fieldId) {
+                const field = document.querySelector(fieldId);
+                if (!field.value) {
+                    field.classList.add("is-invalid");
+                    isValid = false;
+                } else {
+                    field.classList.remove("is-invalid");
+                }
+            });
+
+            // Prevent form submission if any date field is invalid
+            if (!isValid) {
+                event.preventDefault();
+                alert("Please fill in all required date fields.");
+            }
+        });
+    });
+</script>
+
+<!-- Additional JavaScript -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+<script th:src="@{/assets/js/moment.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap-datetimepicker.min.js}"></script>
+
+<style>
+    .is-invalid {
+        border: 1px solid red;
+    }
+</style>
+
+</body>
+</html>

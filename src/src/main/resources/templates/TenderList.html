@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tender Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .dashboard-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .summary-card p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .chart-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Smaller chart size */
+        #tenderStatusChart {
+            width: 100%;
+            max-width: 250px; /* Adjust to make the chart smaller */
+            height: auto;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body layout:fragment="content">
+<div class="container">
+    <div th:switch="${users}">
+        <div class="text-center">
+            <h2 th:case="null" class="text-muted mt-5">No Tender Available!</h2>
+            <div th:case="*">
+                <h2 class="dashboard-title">Tender Dashboard</h2>
+
+                <!-- Summary Card for Total Tenders -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mx-auto">
+                        <div class="summary-card">
+                            <h3 th:text="${users.size()}">0</h3>
+                            <p>Total Number of Tenders</p>
+                        </div>
+                    </div>
+
+
+                <!-- Pie Chart for Tender Status -->
+
+                    <div class="col-md-8 mx-auto chart-container">
+                        <h5 class="text-center">Tender Status Distribution</h5>
+                        <canvas id="tenderStatusChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tender List Table -->
+                <h2 class="dashboard-title">Tender List</h2>
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Report Date</th>
+                        <th scope="col">Name of Work</th>
+                        <th scope="col">Department</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="emp: ${users}">
+                        <td th:text="${emp.searchDate}"></td>
+                        <td th:text="${emp.organization}"></td>
+                        <td th:text="${emp.clientName}"></td>
+                        <td>
+                            <a th:href="@{'/TenderFormEdit/' + ${emp.id}}" class="btn btn-sm btn-primary">View/Edit</a>
+                            <a th:href="@{'/approveTenderForm/' + ${emp.id}}" class="btn btn-sm btn-warning">Approve/reject</a>
+<!--                            <a th:href="@{'/tender-activities/' + ${emp.id}}" class="btn btn-sm btn-info">Activities</a>-->
+                            <form th:action="@{'/delete/' + ${emp.id}}" method="post" style="display: inline;">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add Tender Button -->
+        <div class="text-center mt-4">
+            <a th:href="@{'/TenderEntry'}" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add New Tender</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="assets/js/jquery-3.7.1.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+
+<!-- Chart.js Pie Chart Script -->
+<script>
+    // Sample data for demonstration
+    const tenderStatusData = {
+        labels: ['Open', 'In Progress', 'Closed', 'Cancelled'],
+        datasets: [{
+            data: [5, 3, 2, 1], // Example data; replace with actual status counts
+            backgroundColor: ['green', '#ffc107', '#dc3545', '#6c757d'],
+            hoverBackgroundColor: ['#218838', '#e0a800', '#c82333', '#5a6268']
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: tenderStatusData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    };
+
+    // Initialize the pie chart
+    window.onload = function () {
+        const ctx = document.getElementById('tenderStatusChart').getContext('2d');
+        new Chart(ctx, config);
+    };
+</script>
+</body>
+</html>

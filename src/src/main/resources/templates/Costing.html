@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+
+  <meta charset="UTF-8">
+  <title>Bid Evaluation</title>
+
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <!-- Fontawesome CSS -->
+  <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+  <!-- Lineawesome CSS -->
+  <link rel="stylesheet" href="assets/css/line-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/material.css">
+
+
+  <!-- Select2 CSS -->
+  <link rel="stylesheet" href="assets/css/select2.min.css">
+
+  <!-- Datatable CSS -->
+  <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <!-- Datetimepicker CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+</head>
+<body layout:fragment="content">
+<div class="container mt-5">
+  <h2>Costing Form</h2>
+  <form th:action="@{/costing}" th:object="${costing}" method="post">
+
+    <div class="row mb-2"  th:object="${tender}">
+      <div class="col-md-3">
+        <input type="hidden" class="form-control" th:value="${tender.id}"  id="tenderNumber" name="tenderNumber" required>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+      <label for="asPerSurvey">As per Survey </label>
+      </div>
+      <div class="col-md-3">
+      <input type="number"  th:value="${costing != null ? costing.asPerSurvey : 0}" id="asPerSurvey" name="asPerSurvey" class="form-control" oninput="limitDigits(this, 30)" />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="asPerTender">As per Tender </label>
+      </div>
+      <div class="col-md-3">
+        <input type="number" th:value="${costing != null ? costing.asPerTender : 0}" id="asPerTender" name="asPerTender" class="form-control" oninput="limitDigits(this, 30)"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="approvedRates">Approved Rates </label>
+      </div>
+      <div class="col-md-3">
+        <input type="number" th:value="${costing != null ? costing.approvedRates : 0}" id="approvedRates" name="approvedRates" class="form-control" oninput="limitDigits(this, 30)"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="costingQuotedRates">Quoted Rates </label>
+      </div>
+      <div class="col-md-3">
+        <input type="number" th:value="${costing != null ? costing.costingQuotedRates: 0}" id="costingQuotedRates" name="costingQuotedRates" class="form-control" oninput="limitDigits(this, 30)"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="quotedRatesRoundOff">Quoted Rates Round Off </label>
+      </div>
+      <div class="col-md-3">
+        <input type="number" th:value="${costing != null ? costing.quotedRatesRoundOff : 0}" id="quotedRatesRoundOff" name="quotedRatesRoundOff" class="form-control" oninput="limitDigits(this,30)" />
+      </div>
+    </div>
+
+
+
+
+    <!-- Submit and Cancel Buttons -->
+    <div class="row justify-content-center mt-4">
+      <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
+      <button type="reset" class="btn btn-secondary h-auto w-auto" onclick="window.location.href='/costinglist'">Cancel</button>
+    </div>
+  </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="assets/js/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<!-- Datetimepicker JS -->
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+  function limitDigits(input, maxDigits) {
+     if (input.value.length > maxDigits) {
+       input.value = input.value.slice(0, maxDigits);
+     }
+   }
+</script>
+</body>
+</html>

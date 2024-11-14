@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Details</title>
+</head>
+<body>
+<h2>Details for Ticket No: <span th:text="${details.ticketNo}"></span></h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Remarks</th>
+        <th>Branch Code</th>
+        <th>User</th>
+        <th>Needs</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="yolo : ${details.yoloList}">
+        <td th:text="${yolo.remarks}"></td>
+        <td th:text="${yolo.branchCode}"></td>
+        <td th:text="${yolo.user}"></td>
+        <td th:text="${yolo.needs}"></td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/addYolo(ticketNo=${details.ticketNo})}">Add Yolo</a>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title th:text="'Department Response - ' + ${departmentName}">Department Response</title>    <!-- No Bootstrap -->
+
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Lineawesome CSS -->
+    <link rel="stylesheet" href="assets/css/line-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/material.css">
+
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+
+    <!-- Datatable CSS -->
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- Datetimepicker CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+<title> Departments </title>
+</head>
+<body  layout:fragment="content">
+<div class="container">
+    <h2 th:text="'Tender Response - ' + ${departmentName}"></h2>
+
+<form action="#" th:action="@{'/department/' + ${departmentName} + '/tender/' + ${tender.id} + '/save'}" method="post" th:object="${departmentResponse}" class="p-3" enctype="multipart/form-data" onsubmit="return validateForm()">
+
+<div class="row mb-2 mt-5">
+    <div class="col-md-3">
+        <label for="status">Tender status:</label>
+    </div>
+    <div class="col-md-3" >
+        <select id="status" th:field="*{status}" name="status" class="form-control" required>
+            <option value="" disabled>Select Status</option>
+            <option value="Received">Received</option>
+            <option value="Pending">Pending</option>
+            <option value="In Proceeding">In Proceeding</option>
+        </select>
+
+    </div>
+</div>
+<div class="row mb-2" id="receivedDateRow" >
+    <div class="col-md-3">
+        <label for="receivedDate">Tender Fee Receive Date:</label>
+    </div>
+    <div class="col-md-3">
+        <input type="date" class="form-control"  th:field="*{receivedDate}"  id="receivedDate" name="receivedDate" required>
+    </div>
+</div>
+<div class="row mb-2" id="remarksRow">
+    <div class="col-md-3">
+        <label for="remarks">Remarks:</label>
+    </div>
+    <div class="col-md-3">
+        <textarea id="remarks" name="remarks" th:field="*{remarks}" rows="7" cols="35" placeholder="Enter any additional remarks here..." required></textarea>    </div>
+</div>
+    <div class="row justify-content-center mt-4">
+        <button type="submit" name="action" class="btn btn-primary h-auto w-auto">Submit</button>
+        <button type="submit" name="action" value="saveDraft" class="btn btn-primary  h-auto w-auto">Save Draft</button>
+        <a th:href="@{'/tenders'}" class="btn btn-secondary  h-auto w-auto">Cancel</a>
+
+
+    </div>
+
+</form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="assets/js/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<!-- Datetimepicker JS -->
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body>
+<div align="center">
+    <table width="100%">
+        <tr>
+            <td align="center" >
+                <center  style="color:white; 30;padding-top:30px;"><span  style="font-size: 1.2em;background-color: #25037A;" class = "label">Employee</span></center>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <form action="#" th:action="@{/savecourier}" th:object="${Persons}"
+          method="post">
+
+        <table border="0" cellpadding="10">
+
+            <tr>
+                <td>S.No.:</td>
+                <td><input type="text" th:field="*{id}" readonly="readonly" /></td>
+
+            </tr>
+
+            <tr>
+                <td>First Name:</td>
+                <td><input type="text" th:field="*{firstName}" /></td>
+            </tr>
+            <tr>
+                <td>Last Name :</td>
+                <td><input type="text" th:field="*{lastName}" /></td>
+            </tr>
+            <tr>
+                <td>eMail ID:</td>
+                <td><input type="text" th:field="*{emailID}" /></td>
+            </tr>
+
+
+            <tr align="center">
+                <td colspan="2"><button type="submit" style="background-color: #040878;color: white;width:100px;margin:20px 0px 0 10px;;padding-top:4;height:32;">Save</button></td>
+                <a href="http://localhost:8080/AllIndex"><input type="submit" class="btn btn-primary" value="Go Back"></a>
+            </tr>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Maintenance Entry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <script>function yo(){alert("your ticket id is")</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function updateStatus() {
+
+            var statusField = document.getElementById("status");
+
+
+                statusField.value = "Pending"; // You can set a default or leave it empty if no assignment is selected
+
+        }
+        document.getElementById("maintenanceForm").addEventListener("submit", updateStatus)
+        function generateTicket() {
+            // Generate a random ticket number (example: using a simple random number for illustration)
+            var ticketNumber = Math.floor(Math.random() * 1000000); // Adjust the range as needed
+
+            // Set the generated ticket number to a hidden input field or directly to the form data
+            document.getElementById("ticketNo").value = ticketNumber;
+
+            // Optionally, you can log the ticket number or display it in an alert
+            alert("Generated ticket number: " + ticketNumber);
+        }
+
+        // Bind the function to form submission
+        document.getElementById("maintenanceForm").addEventListener("submit", generateTicket);
+
+
+    </script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .center-align {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+</head>
+<body>
+<div class="center-align">
+    <div class="container">
+        <h2>Maintenance Entry</h2>
+        <form action="#" th:action="@{/Maintadd}" th:object="${user}" method="post">
+            <div class="form-group">
+                <label for="dept">Asset Name</label>
+                <input type="text" th:field="*{nameOfAsset}" id="dept" placeholder="Asset Name">
+            </div>
+            <div class="form-group">
+                <label for="division">Reported By</label>
+                <input type="text" th:field="*{reportedBy}" id="division" placeholder="Reported By">
+            </div>
+            <div class="form-group">
+                <label for="pdate">Reported Date</label>
+                <input type="date" th:field="*{publishDate}" id="pdate">
+            </div>
+            <div class="form-group">
+                <label for="duedate">Due Date</label>
+                <input type="date" th:field="*{dueDate}" id="duedate">
+            </div>
+            <div class="form-group">
+                <label for="nameOfWork">Description</label>
+                <input type="text" th:field="*{Description}" id="nameOfWork" placeholder="Description">
+            </div>
+            <div class="form-group">
+               <a th:onclick="updateStatus(); "> <input type="submit" th:onclick="generateTicket() "  value="Submit"></a>
+
+
+<!--            </div><div class="form-group">-->
+<!--            <input type="submit" th:onclick="updateStatus(); " value="Submit">-->
+
+
+<!--        </div>-->
+            <div class="form-group">
+                <input type="hidden" th:field="*{ticketNo}" id="ticketNo">
+                <input type="hidden" th:field="*{status}" id="status"  />
+            </div>
+
+
+        </form>
+    </div>
+    <!--    <p>User ID: <span th:text="${id}"></span></p>-->
+</div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Enter Tender Details</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+</head>
+<body layout:fragment="content">
+<div class="container">
+  <h2 class="mt-5">Final Bid Submit</h2>
+  <form action="#" th:action="@{/finalBidSubmitionSave}" method="post" th:object="${FinalBidSubmittion}" class="p-3" enctype="multipart/form-data" >
+    <div class="row mb-2"  th:object="${tender}" id="TechnicalApproveByrow" >
+      <div class="col-md-3">
+        <label for="TechnicalApproveBy">Technical Approve By</label>
+      </div>
+      <div class="col-md-3">
+        <input type="hidden" class="form-control" th:value="${tender.id}"  id="tenderNumber" name="tenderNumber" required>
+        <input type="text" class="form-control"  th:value="${TechnicalApproveBy != null ? FinalBidSubmittion.TechnicalApproveBy : ''}"  id="TechnicalApproveBy" name="TechnicalApproveBy" maxlength="30" >
+        <input type="hidden" class="form-control"  th:value="${FinalBidSubmittion != null ? FinalBidSubmittion.TechnicalApproveBy_id : 0}"  id="TechnicalApproveBy_id" name="TechnicalApproveBy_id"  >
+      </div>
+    </div>
+
+    <div class="row mb-2" id="FinancialApproveByrow" >
+      <div class="col-md-3">
+        <label for="FinancialApproveBy">Financial Approve By</label>
+      </div>
+      <div class="col-md-3">
+
+        <input type="text" class="form-control"  th:value="${FinalBidSubmittion != null ? FinalBidSubmittion.FinancialApproveBy : ''}"  id="FinancialApproveBy" name="FinancialApproveBy" maxlength="30" >
+        <input type="hidden" class="form-control"  th:value="${FinalBidSubmittion != null ? FinalBidSubmittion.FinancialApproveBy_id : 0}"  id="FinancialApproveBy_id" name="FinancialApproveBy_id"  >
+      </div>
+    </div>
+
+    <div class="row mb-2" id="participationStatusrow" >
+      <div class="col-md-3">
+        <label for="participationStatus">Participation Status</label>
+      </div>
+
+      <div class="col-md-3"  th:if="${FinalBidSubmittion != null}">
+        <select id="participationStatus" name="participationStatus"  class="form-control" onchange="togglePaymentFields(this)" required>
+          <option value="" disabled selected>Select...</option>
+          <option value="0">Not-Participated</option>
+          <option value="1">Participated</option>
+        </select>
+      </div>
+      <div class="col-md-3" th:unless="${FinalBidSubmittion != null}">
+        <select id="participationStatus" onchange="togglePaymentFields(this)" name="participationStatus" class="form-control" required>
+          <option value="" disabled selected>Select...</option>
+          <option value="0">Not-Participated</option>
+          <option value="1">Participated</option>
+        </select>
+      </div>
+
+
+    </div>
+    <div class="row mb-2" id="notParticipatedReasonrow" style="hidden" >
+      <div class="col-md-3">
+        <label for="notParticipatedReason">Not Participated Reason</label>
+      </div>
+      <div class="col-md-3">
+
+        <input type="text" class="form-control"  th:value="${FinalBidSubmittion != null ? FinalBidSubmittion.notParticipatedReason : ''}"  id="notParticipatedReason" name="notParticipatedReason" maxlength="30" >
+       </div>
+    </div>
+
+    <h4 class="mt-4" id="uploadHeader">Upload</h4>
+    <!-- Upload Tender Document, Check List, EMD Format, Annexures -->
+    <div class="form-group" id="AcknowledgementRow">
+      <label for="Acknowledgement">Upload Acknowledgement:</label>
+      <input type="file" accept=".pdf" class="form-control-file" id="Acknowledgement" name="Acknowledgement">
+    </div>
+    <div class="form-group" id="FinancialWorkingSheetRow">
+      <label for="FinancialWorkingSheet">Upload Financial Working Sheet:</label>
+      <input type="file" accept=".pdf" class="form-control-file" id="FinancialWorkingSheet" name="FinancialWorkingSheet">
+    </div>
+    <div class="form-group" id="EMDCopyRow">
+      <label for="EMDCopy">Upload EMD Copy:</label>
+      <input type="file" accept=".pdf" class="form-control-file" id="EMDCopy" name="EMDCopy">
+    </div>
+    <div class="form-group" id="TechnicalDocumentsRow">
+      <label for="TechnicalDocuments">Upload Technical Documents:</label>
+      <input type="file" accept=".pdf" class="form-control-file" id="TechnicalDocuments" name="TechnicalDocuments">
+    </div>
+
+
+    <div class="row justify-content-center">
+      <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
+      <a href="#" class="btn btn-secondary h-auto w-auto ms-2" >Cancel</a>
+
+    </div>
+  </form>
+</div>
+
+<script>
+
+
+  function togglePaymentFields(that) {
+        const status = that.value;
+
+          if (status === '1') {
+
+            document.getElementById('notParticipatedReasonrow').style.display = 'none';
+          } else if (status === '0' ) {
+            document.getElementById('notParticipatedReasonrow').style.display = 'flex';
+          }
+      }
+
+
+  $("#TechnicalApproveBy").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "/searchuserDetails",
+                data: { query: request.term },
+                success: function(data) {
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            $("#TechnicalApproveBy").val(ui.item.label);
+            $("#TechnicalApproveBy_Id").val(ui.item.value);
+            return false;
+        }
+    });
+
+
+  $("#FinancialApproveBy").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "/searchuserDetails",
+                data: { query: request.term },
+                success: function(data) {
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
+                }
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            $("#FinancialApproveBy").val(ui.item.label);
+            $("#FinancialApproveBy_Id").val(ui.item.value);
+            return false;
+        }
+    });
+
+</script>
+
+</body>
+</html>
