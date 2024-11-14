@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{layout}">
+<head>
+
+  <meta charset="UTF-8">
+  <title>Survey </title>
+
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <!-- Fontawesome CSS -->
+  <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+  <!-- Lineawesome CSS -->
+  <link rel="stylesheet" href="assets/css/line-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/material.css">
+
+
+  <!-- Select2 CSS -->
+  <link rel="stylesheet" href="assets/css/select2.min.css">
+
+  <!-- Datatable CSS -->
+  <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <!-- Datetimepicker CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+</head>
+<body layout:fragment="content">
+<div class="container mt-5">
+  <h2>Survey Form</h2>
+  <form th:action="@{/surveySave}" th:object="${Survey}" method="post">
+
+    <div class="row mb-2"  th:object="${tender}">
+      <div class="col-md-3">
+        <input type="hidden" class="form-control" th:value="${tender.id}"  id="tenderNumber" name="tenderNumber" required>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="surveyRequired">Survey Required</label>
+      </div>
+      <div class="col-md-3">
+        <select th:field="*{surveyRequired}" id="surveyRequired" name="surveyRequired" class="form-control">
+          <option value="" disabled>Select Status</option>
+          <option value="1" th:selected="${Survey.surveyRequired == 1}">Yes</option>
+          <option value="0" th:selected="${Survey.surveyRequired == 0}">No</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="surveyUnit">Survey Unit</label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" th:value="${Survey != null ? Survey.surveyUnit : 0}" id="surveyUnit" name="surveyUnit" class="form-control" oninput="limitDigits(this, 30)"/>
+        <input type="hidden" id="survey_id" name="survey_id"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="surveySendDate">Survey Send Date</label>
+      </div>
+      <div class="col-md-3">
+        <input type="date" th:value="${Survey != null ? Survey.surveySendDate : 0}" id="surveySendDate" name="surveySendDate" class="form-control" oninput="limitDigits(this, 30)"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="surveyorName">Surveyor Name
+        </label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" th:value="${Survey != null ? Survey.surveyorName: 0}" id="surveyorName" name="surveyorName" class="form-control" oninput="limitDigits(this, 30)"/>
+        <input type="hidden" id="surveyorName_id" name="surveyorName_id"/>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="surveyStatus">Survey Status</label>
+      </div>
+      <div class="col-md-3">
+        <select th:field="*{surveyStatus}" id="surveyStatus" name="surveyStatus" class="form-control">
+          <option value="" disabled>Select Status</option>
+          <option value="1" th:selected="${Survey.surveyStatus == 1}">Pending</option>
+          <option value="2" th:selected="${Survey.surveyStatus == 2}">Done</option>
+          <option value="3" th:selected="${Survey.surveyStatus == 3}">Over Due</option>
+          <option value="4" th:selected="${Survey.surveyStatus == 4}">Not Done</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="surveyReceiveDate">Survey Received Date</label>
+      </div>
+      <div class="col-md-3">
+        <input type="date" th:value="${Survey != null ? Survey.surveyReceiveDate: 0}" id="surveyReceiveDate" name="surveyReceiveDate" class="form-control" oninput="limitDigits(this, 30)"/>
+
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <label for="surveyRemarks">Survey Final Comments</label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" th:value="${Survey != null ? Survey.surveyRemarks: 0}" id="surveyRemarks" name="surveyRemarks" class="form-control" oninput="limitDigits(this, 100)"/>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- Submit and Cancel Buttons -->
+    <div class="row justify-content-center mt-4">
+      <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
+      <button type="reset" class="btn btn-secondary h-auto w-auto" onclick="window.location.href='/Surveylist'">Cancel</button>
+    </div>
+  </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="assets/js/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<!-- Datetimepicker JS -->
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+  function limitDigits(input, maxDigits) {
+     if (input.value.length > maxDigits) {
+       input.value = input.value.slice(0, maxDigits);
+     }
+   }
+</script>
+</body>
+</html>

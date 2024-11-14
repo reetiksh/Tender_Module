@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Tender</title>
+    <!-- No Bootstrap -->
+
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+    <!-- Lineawesome CSS -->
+    <link rel="stylesheet" href="assets/css/line-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/material.css">
+
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" href="assets/css/select2.min.css">
+
+    <!-- Datatable CSS -->
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- Datetimepicker CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+
+</head>
+<body  layout:fragment="content">
+
+<div th:switch="${activities}" style="margin-top: 50px;">
+    <div style="margin: 0 auto; max-width: 800px; text-align: center;">
+        <h2 th:case="null">No activities defined!</h2>
+        <div th:case="*">
+            <h2 style="margin-bottom: 30px;">Tender Activities</h2>
+            <form th:action="@{/save-from-master}" method="post">
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+                    <thead>
+                    <tr>
+                        <th style="padding: 10px; border: 1px solid #ccc;">select</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Activity ID</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Activity</th>
+                        <!--                    <th style="padding: 10px; border: 1px solid #ccc;">Status</th>-->
+                        <th style="padding: 10px; border: 1px solid #ccc;">User</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Due Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="activity, iterStat : ${activities}">
+
+                        <td style="padding: 10px; border: 1px solid #ccc;" ><input type="hidden" name="activityindex" th:value="${activity.id}"/><input type="checkbox" name="masterIds" th:value="${iterStat.index}"/></td>
+                        <td style="padding: 10px; border: 1px solid #ccc;"th:text="${activity.id}"></td>
+                        <td style="padding: 10px; border: 1px solid #ccc;" th:text="${activity.activity}" ></td>
+                        <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.status}"></td>-->
+                        <td style="padding: 10px; border: 1px solid #ccc;"><input type="text" name="users" placeholder="User" th:id="${'user' + iterStat.index}"/></td>
+                        <td style="padding: 10px; border: 1px solid #ccc;"><input type="date" name="dueDates" placeholder="Due Date" th:id="${'dueDate' + iterStat.index}"/>
+
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <input type="hidden" name="tenderId" th:value="${tenderid}"/>
+                <button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #007bff;">submit</button>
+            </form>
+
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script th:src="@{/assets/js/jquery-3.7.1.min.js}"></script>
+
+        <!-- Bootstrap Core JS -->
+
+        <script src="@{/assets/js/bootstrap-datetimepicker.min.js}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script th:src="@{/assets/js/jquery-3.7.1.min.js}"></script>
+
+        <!-- Bootstrap Core JS -->
+        <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+        <script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
+        <script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <!-- Datetimepicker JS -->
+        <script th:src="@{/assets/js/moment.min.js}"></script>
+        <script>
+
+
+            $(document).ready(function() {
+                $("input[name='users']").autocomplete({
+                    source: function(request, response) {
+                        $.ajax({
+                            url: "/searchuserDetails",
+                            data: {
+                                query: request.term
+                            },
+                            success: function(data) {
+                                var suggestions = [];
+                                $.each(data, function(index, item) {
+                                    suggestions.push({
+                                        value: item.suplierId, // Displayed in the input field
+                                        label: item.supplier // Displayed in the dropdown
+                                    });
+                                });
+                                response(suggestions);
+                            }
+                        });
+                    },
+                    minLength: 2,
+                    select: function(event, ui) {
+                        // Set the value of the #caseTitle input field
+                        $("input[name='users']").val(ui.item.label);
+    <!--                    // Set the value of the hidden #caseId input field-->
+    <!--                    $("#caseId").val(ui.item.caseId);-->
+    <!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
+                        return false; // Prevent default behavior of setting the value
+                    }
+                }).data("ui-autocomplete")._renderMenu = function(ul, items) {
+                    var $table = $('<table class="table table-hover mb-0"></table>');
+                    var $header = $('<tr><th>Supplier</th><th>Supplier Id ID</th></tr>');
+                    $table.append($header);
+                    ul.append($table);
+                    var self = this;
+                    $.each(items, function(index, item) {
+                        self._renderItemData(ul, item);
+                    });
+                };
+
+                $.ui.autocomplete.prototype._renderItem = function(ul, item) {
+                    var $row = $('<tr class="ui-menu-item"></tr>');
+                    $row.append('<td>' + item.label + '</td>');
+                    $row.append('<td>' + item.value + '</td>');
+
+                    $row.data("ui-autocomplete-item", item);
+                    return $row.appendTo(ul.find('table'));
+                };
+            });
+
+        </script>
+</body>
+</html>

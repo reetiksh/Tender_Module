@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Example</title>
+</head>
+<body>
+<h2>Form Example</h2>
+
+<form action="/saveRows" method="post" th:object="${rowDataList}">
+    <table>
+        <thead>
+        <tr>
+            <th>Checklist Task</th>
+            <th>Owner</th>
+            <th>Last Date</th>
+            <th>Status</th>
+            <th>Period</th>
+            <th>Escalation Mail</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="rowData, rowStat : *{rowDataList}">
+            <td>
+                <select th:field="*{rowData[__${rowStat.index}__].dropdown1}">
+                    <option th:each="option : ${dropdownOptions1}"
+                            th:value="${option.id}"
+                            th:text="${option.optionName}">
+                    </option>
+                </select>
+            </td>
+            <td>
+                <select th:field="*{rowData[__${rowStat.index}__].dropdown2}">
+                    <option th:each="option : ${dropdownOptions2}"
+                            th:value="${option.id}"
+                            th:text="${option.optionName}">
+                    </option>
+                </select>
+            </td>
+            <td><input type="text" th:field="*{rowData[__${rowStat.index}__].field1}" /></td>
+            <td><input type="text" th:field="*{rowData[__${rowStat.index}__].field2}" /></td>
+            <td><input type="text" th:field="*{rowData[__${rowStat.index}__].field3}" /></td>
+            <td><input type="text" th:field="*{rowData[__${rowStat.index}__].field4}" /></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button type="submit">Save Rows</button>
+</form>
+</body>
+</html>

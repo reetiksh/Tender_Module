@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <link rel="stylesheet" th:href="@{assets/css/bootstrap.min.css}">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" th:href="@{assets/plugins/fontawesome/css/fontawesome.min.css}">
+    <link rel="stylesheet" th:href="@{assets/plugins/fontawesome/css/all.min.css}">
+
+    <!-- Lineawesome CSS -->
+    <link rel="stylesheet" th:href="@{assets/css/line-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{assets/css/material.css}">
+
+
+    <!-- Select2 CSS -->
+    <link rel="stylesheet" th:href="@{assets/css/select2.min.css}">
+
+    <!-- Datatable CSS -->
+    <link rel="stylesheet" th:href="@{assets/css/dataTables.bootstrap4.min.css}">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" th:href="@{assets/css/style.css}">
+
+    <!-- Datetimepicker CSS -->
+    <link rel="stylesheet" th:href="@{assets/css/bootstrap-datetimepicker.min.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Load jQuery UI (needed for autocomplete) -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+    <meta charset="UTF-8">
+    <title>Allocation of Tender to Prepare</title>
+</head>
+<body layout:fragment="content">
+
+
+<h1>Allocation of Tender to Prepare</h1>
+<div class="container mt-5">
+
+    <!-- Success Message -->
+    <div th:if="${param.success}" class="alert alert-success" role="alert">
+        Data saved successfully!
+    </div>
+
+    <!-- Tender Preparation Form -->
+    <form th:action="@{/tender/prepare}" th:object="${user}" method="post" class="needs-validation" novalidate>
+
+
+            <div>
+            <input type="hidden" class="form-control"   id="tenderNumber" name="tenderNumber" required>
+            </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3">
+            <label for="checklistPreparedBy" >Checklist Prepared By:</label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="checklistPreparedBy"name="checklistPreparedBy"  class="form-control" required />
+                <input type="hidden" id="checklistPreparedById" name="checklistPreparedById">
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="checklistPreparedByLastDate"name="checklistPreparedByLastDate"  class="form-control"  required />
+            </div>
+        </div>
+
+        <div class=" row mb-3">
+            <div class="col-md-3">
+            <label for="technicalPreparedBy" >Technical Prepared By:</label>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" name="technicalPreparedBy"id="technicalPreparedBy"  class="form-control"  required />
+                <input type="hidden" id="technicalPreparedById" name="technicalPreparedById">
+
+
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="technicalPreparedByLastDate"name="technicalPreparedByLastDate"  class="form-control"  required />
+
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+            <label for="financialPreparedBy" >Financial Prepared By:</label>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" id="financialPreparedBy" name="financialPreparedBy"  class="form-control"  required />
+                <input type="hidden" id="financialPreparedById" name="financialPreparedById">
+
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="financialPreparedByLastDate" name="financialPreparedByLastDate"  class="form-control"  required />
+
+            </div>
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <div class="form-group row">
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                <a th:href="@{'/tender/prepare'}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function() {
+$("#checklistPreparedBy").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchuserDetails",
+            data: {
+                query: request.term
+            },
+            success: function(data) {
+                var suggestions = [];
+                $.each(data, function(index, item) {
+                    suggestions.push({
+                        value: item.suplierId, // Displayed in the input field
+                        label: item.supplier, // Displayed in the dropdown
+
+                    });
+                });
+                response(suggestions);
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        // Set the value of the #caseTitle input field
+        $("#checklistPreparedBy").val(ui.item.label);
+        $("#checklistPreparedById").val(ui.item.value);
+
+<!--                    // Set the value of the hidden #caseId input field-->
+<!--                    $("#caseId").val(ui.item.caseId);-->
+<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
+        return false; // Prevent default behavior of setting the value
+    }
+}).data("ui-autocomplete")._renderMenu = function(ul, items) {
+    var $table = $('<table class="table table-hover mb-0"></table>');
+    var $header = $('<tr><th>Supplier</th><th>Supplier Id ID</th></tr>');
+    $table.append($header);
+    ul.append($table);
+    var self = this;
+    $.each(items, function(index, item) {
+        self._renderItemData(ul, item);
+    });
+};
+
+$.ui.autocomplete.prototype._renderItem = function(ul, item) {
+    var $row = $('<tr class="ui-menu-item"></tr>');
+    $row.append('<td>' + item.label + '</td>');
+    $row.append('<td>' + item.value + '</td>');
+
+    $row.data("ui-autocomplete-item", item);
+    return $row.appendTo(ul.find('table'));
+};
+});
+
+// function 2
+    $(document).ready(function() {
+$("#technicalPreparedBy").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchuserDetails",
+            data: {
+                query: request.term
+            },
+            success: function(data) {
+                var suggestions = [];
+                $.each(data, function(index, item) {
+                    suggestions.push({
+                        value: item.suplierId, // Displayed in the input field
+                        label: item.supplier, // Displayed in the dropdown
+
+                    });
+                });
+                response(suggestions);
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        // Set the value of the #caseTitle input field
+        $("#technicalPreparedBy").val(ui.item.label);
+        $("#technicalPreparedById").val(ui.item.value);
+
+<!--                    // Set the value of the hidden #caseId input field-->
+<!--                    $("#caseId").val(ui.item.caseId);-->
+<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
+        return false; // Prevent default behavior of setting the value
+    }
+}).data("ui-autocomplete")._renderMenu = function(ul, items) {
+    var $table = $('<table class="table table-hover mb-0"></table>');
+    var $header = $('<tr><th>Supplier</th><th>Supplier Id ID</th></tr>');
+    $table.append($header);
+    ul.append($table);
+    var self = this;
+    $.each(items, function(index, item) {
+        self._renderItemData(ul, item);
+    });
+};
+
+$.ui.autocomplete.prototype._renderItem = function(ul, item) {
+    var $row = $('<tr class="ui-menu-item"></tr>');
+    $row.append('<td>' + item.label + '</td>');
+    $row.append('<td>' + item.value + '</td>');
+
+    $row.data("ui-autocomplete-item", item);
+    return $row.appendTo(ul.find('table'));
+};
+});
+
+    //function 3
+
+    $(document).ready(function() {
+$("#financialPreparedBy").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchuserDetails",
+            data: {
+                query: request.term
+            },
+            success: function(data) {
+                var suggestions = [];
+                $.each(data, function(index, item) {
+                    suggestions.push({
+                        value: item.suplierId, // Displayed in the input field
+                        label: item.supplier, // Displayed in the dropdown
+
+                    });
+                });
+                response(suggestions);
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        // Set the value of the #caseTitle input field
+        $("#financialPreparedBy").val(ui.item.label);
+        $("#financialPreparedById").val(ui.item.value);
+
+<!--                    // Set the value of the hidden #caseId input field-->
+<!--                    $("#caseId").val(ui.item.caseId);-->
+<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
+        return false; // Prevent default behavior of setting the value
+    }
+}).data("ui-autocomplete")._renderMenu = function(ul, items) {
+    var $table = $('<table class="table table-hover mb-0"></table>');
+    var $header = $('<tr><th>Supplier</th><th>Supplier Id ID</th></tr>');
+    $table.append($header);
+    ul.append($table);
+    var self = this;
+    $.each(items, function(index, item) {
+        self._renderItemData(ul, item);
+    });
+};
+
+$.ui.autocomplete.prototype._renderItem = function(ul, item) {
+    var $row = $('<tr class="ui-menu-item"></tr>');
+    $row.append('<td>' + item.label + '</td>');
+    $row.append('<td>' + item.value + '</td>');
+
+    $row.data("ui-autocomplete-item", item);
+    return $row.appendTo(ul.find('table'));
+};
+});
+</script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+
+<!-- Datetimepicker JS -->
+<script th:src="@{/assets/js/moment.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap-datetimepicker.min.js}"></script>
+</body>
+</html>

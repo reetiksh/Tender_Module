@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Your head content here -->
+</head>
+<body>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Remarks</th>
+        <th>Ticket No</th>
+        <th>Branch Code</th><th>user</th><th>needs</th>
+        <!-- Add more headers as per your Yolo entity -->
+    </tr>
+    </thead>
+    <tbody>
+    <div><tr th:each="yolo : ${yolo}">
+        <td th:text="${yolo.id}"></td>
+        <td th:text="${yolo.remarks}"></td>
+        <td th:text="${yolo.ticketNo}"></td>
+        <td th:text="${yolo.branchCode}"></td><td th:text="${yolo.user}"></td><td th:text="${yolo.needs}"></td>
+        <!-- Add more columns as per your Yolo entity -->
+    </tr>
+    </tbody>
+
+</table>
+<a   th:each="yolo : ${yolo}" th:href="@{'/ticketDetails?ticketNo=' + ${yolo.ticketNo}}"> <!-- Link to ticket details -->
+    <span th:text="${yolo.ticketNo}"></span>
+</a></div></body></html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Item</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px; /* Add some padding to the top */
+        }
+
+        .container {
+            max-width: 600px; /* Limit the width of the form */
+            margin: auto; /* Center the form horizontally */
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Add space between form elements */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center">View/Editbb</h1>
+    <form th:action="@{/edit/{id}(id=${user.id})}" method="post" th:object="${user}">
+        <div class="form-group">
+            <label for="nameOfAsset">Name:</label>
+            <input type="text" class="form-control" id="nameOfAsset" th:field="*{nameOfAsset}" />
+        </div>
+
+        <div class="form-group">
+            <label for="reportedBy">Reported By:</label>
+            <input type="text" class="form-control" id="reportedBy" th:field="*{reportedBy}" />
+        </div>
+
+        <div class="form-group">
+            <label for="publishDate">Publish Date:</label>
+            <input type="date" class="form-control" id="publishDate" th:field="*{publishDate}" />
+        </div>
+
+        <div class="form-group">
+            <label for="dueDate">Due Date:</label>
+            <input type="date" class="form-control" id="dueDate" th:field="*{dueDate}" />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" id="description" th:field="*{description}" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+
+</body>
+</html>

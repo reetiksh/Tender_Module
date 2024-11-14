@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Tender</title>
+  <!-- No Bootstrap -->
+
+
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+
+  <!-- Fontawesome CSS -->
+  <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+
+  <!-- Lineawesome CSS -->
+  <link rel="stylesheet" href="assets/css/line-awesome.min.css">
+  <link rel="stylesheet" href="assets/css/material.css">
+
+
+  <!-- Select2 CSS -->
+  <link rel="stylesheet" href="assets/css/select2.min.css">
+
+  <!-- Datatable CSS -->
+  <link rel="stylesheet" href="assets/css/dataTables.bootstrap4.min.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <!-- Datetimepicker CSS -->
+  <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+
+</head>
+<body  layout:fragment="content">
+
+<div th:switch="${users}" style="margin-top: 50px;">
+  <div style="margin: 0 auto; max-width: 800px; text-align: center;">
+    <h2 th:case="null">No Tender yet!</h2>
+    <div th:case="*">
+      <h2 style="margin-bottom: 30px;">Tender List</h2>
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid #ccc;">
+        <thead>
+        <tr>
+          <th style="padding: 10px; border: 1px solid #ccc;">Report Date</th>
+          <th style="padding: 10px; border: 1px solid #ccc;">Name Of Work</th>
+          <th style="padding: 10px; border: 1px solid #ccc;">Department</th>
+          <!--                    <th style="padding: 10px; border: 1px solid #ccc;">Status</th>-->
+          <!--                    <th style="padding: 10px; border: 1px solid #ccc;">Description</th>-->
+          <th style="padding: 10px; border: 1px solid #ccc;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="emp: ${users}">
+          <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.publishDate}"></td>
+          <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.nameOfWork}"></td>
+          <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.department}"></td>
+          <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.status}"></td>-->
+          <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.Description}"></td>-->
+          <td style="padding: 10px; border: 1px solid #ccc;">
+            <a th:href="@{'/PreBidEntry/' + ${emp.id}}" style="text-decoration: none; color: #007bff; margin-right: 10px;"><button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #007bff;">Fee Approval</button></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="assets/js/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<!-- Datetimepicker JS -->
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+</body>
+</html>

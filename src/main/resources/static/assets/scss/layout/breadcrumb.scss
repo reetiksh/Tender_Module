@@ -1,0 +1,105 @@
+.breadcrumb {
+    background-color: $__transparent;
+    color: $__wolf;
+    font-size: $__font__size__16;
+    font-weight: $__medium;
+    @include margin-padding(0, 0);
+    @include respond-below(custom575) {
+        display: $__none;
+    }
+	&.active {
+		color: $__wolf;
+	}
+    a{
+        color: $__gray;
+    }
+    .breadcrumb-item{
+        a {
+            color: $__gray;
+        }
+        +.breadcrumb-item{
+            &::before {
+                float: $__left;
+                padding-right: 0.5rem;
+                color: $__wolf;
+                content: "/"
+            }
+        }
+    }
+}
+.comp-section{
+    @include margin-padding(0, 10px 0);
+    .btn {
+        @include margin-padding(0 0 5px, null);
+    }
+    .breadcrumb {
+        @include respond-below(custom575) {
+            display: $__flex;
+        }
+    }
+}
+.breadcrumb-line {
+	.breadcrumb-item {
+		&:before {
+			content: "-";
+		}
+		&:first-child {
+			&:before {
+				content: "";
+			}
+		}
+	}
+}
+.breadcrumb-dot {
+	.breadcrumb-item {
+		&:before {
+			content: "•";
+		}
+		&:first-child {
+			&:before {
+				content: "";
+			}
+		}
+	}
+}
+.breadcrumb-separatorless {
+	.breadcrumb-item {
+		&:before {
+			content: "";
+		}
+	}
+}
+.breadcrumb{
+	margin: 0;
+}
+.breadcrumb-colored {
+	@include margin-padding(0 0 10px, 12px 16px);
+	@include rounded(4px);
+	li {
+		a {
+			color: $__white;
+		}
+	}
+	.breadcrumb-item {
+		&.active {
+			color: $__white;
+			opacity: 0.8;
+		}
+		& + .breadcrumb-item {
+			&::before {
+				color: $__white;
+			}
+		}
+	}
+}
+.twitter-bs-wizard-pager-link {
+	display: $__inline__block;
+}
+.page-header {
+    h5 {
+        color: #1f1f1f;
+        font-size: 26px;
+        font-weight: 500;
+        margin-bottom: 0px;
+    }
+}

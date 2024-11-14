@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Yolo</title>
+</head>
+<body>
+<h2>Add Yolo for Ticket No: <span th:text="${ticketNo}"></span></h2>
+<form action="/addYolo" method="post" th:object="${yolo}">
+<input type="hidden" name="ticketNo" th:value="${ticketNo}">
+    <div>
+        <label for="remarks">Remarks:</label>
+        <input type="text" id="remarks" name="remarks" th:field="*{remarks}"/>
+    </div>
+    <div>
+        <label for="branchCode">Branch Code:</label>
+        <input type="text" id="branchCode" name="branchCode" th:field="*{branchCode}"/>
+    </div>
+    <div>
+        <label for="user">User:</label>
+        <select id="user" th:field="*{user}">
+            <option value="">-- Select --</option>
+            <option value="John Doe">John Doe</option>
+            <option value="Jane Smith">Jane Smith</option>
+            <option value="Mike Johnson">Mike Johnson</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+    <div>
+        <label for="needs">Needs:</label>
+        <input type="text" id="needs" name="needs" th:field="*{needs}"/>
+    </div>
+    <button type="submit">Add Yolo</button>
+</form>
+</body>
+</html>

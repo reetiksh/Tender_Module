@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <Script>
+    function checkDelete(idval) {
+
+        alert("Value for Delete:" + idval) ;
+
+    }
+    </Script>
+</head>
+<body>
+<h1 th:text="${Heading}" />
+
+<table class ="table table-dark" >
+   <thead>
+   <tr>
+       <th>      First Name   </th>
+       <th>      Last Name   </th>
+       <th>      Email   </th>
+
+   </tr>
+   </thead>
+   <tbody>
+   <tr th:each="emp: ${Persons}">
+    <td th:text ="${emp.firstName}">
+       <td th:text ="${emp.lastName}">
+       <td th:text ="${emp.emailID}">
+
+       <td>
+            <a th:href="@{'/edit/employee/' + ${emp.id}}">Edit</a> &nbsp;&nbsp;&nbsp;
+           <button  th:onclick="'javascript:openDelete(\'' + ${emp.id} + '\');'" >Delete</button>
+       </td>
+   </tr>
+   </tbody>
+</table>
+</body>
+</html>

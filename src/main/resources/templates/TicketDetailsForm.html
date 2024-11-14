@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Your head content here -->
+</head>
+<body>
+<h2>Enter Ticket Number</h2>
+<form action="/ticketDetails" method="post">
+    <input type="text" name="ticketNo" placeholder="Enter Ticket Number" required>
+    <button type="submit">Submit</button>
+</form>
+
+<!-- Display error if ticket not found -->
+<p th:text="${error}" style="color: red;"></p>
+</body>
+</html>
