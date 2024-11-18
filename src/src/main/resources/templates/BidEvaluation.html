@@ -48,8 +48,6 @@
         <div class="row mb-2">
             <div class="col-md-3">
                 <label for="technicalStatus">Technical Evaluation</label>
-                <label th:text="${tender.eligibility}"></label>
-
             </div>
             <div class="col-md-3" th:if="${bidEvaluation != null}">
                 <select id="technicalStatus" name="technicalStatus"  class="form-control"  onchange="togglePaymentFields(this)" required>
