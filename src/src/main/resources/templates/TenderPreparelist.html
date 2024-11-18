@@ -6,7 +6,7 @@
 <head>
 
   <meta charset="UTF-8">
-  <title>Bid Evaluation List</title>
+  <title>Tender Preparation List</title>
   <!-- No Bootstrap -->
 
 
@@ -66,7 +66,7 @@
           <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.status}"></td>-->
           <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.Description}"></td>-->
           <td style="padding: 10px; border: 1px solid #ccc;">
-            <a th:href="@{'/bid-evaluation/' + ${emp.id}}" style="text-decoration: none; color: #007bff; margin-right: 10px;"><button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #007bff;">Bid Evaluation</button></a>
+            <a th:href="@{'/tender/prepare/' + ${emp.id}}" style="text-decoration: none; color: #007bff; margin-right: 10px;"><button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #007bff;">Tender Preparation By </button></a>
           </td>
         </tr>
         </tbody>
@@ -75,7 +75,7 @@
     <!-- Add Tender Button -->
     <div class="text-center mt-4">
       <a th:href="@{'/TenderEntry'}" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add New Tender</a>
-    </div> </div>
+    </div>  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="assets/js/jquery-3.7.1.min.js"></script>

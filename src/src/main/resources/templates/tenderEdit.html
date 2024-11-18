@@ -18,7 +18,7 @@
                 <label for="publishDate">Publish Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control" th:field="*{publishDate}"  id="publishDate" name="publishDate" required>
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" th:field="*{publishDate}"  id="publishDate" name="publishDate" required>
             </div>
 
         </div>
@@ -27,7 +27,7 @@
                 <label for="dueDate">Due Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control" th:field="*{dueDate}"   id="dueDate" name="dueDate" required>
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" th:field="*{dueDate}"   id="dueDate" name="dueDate" required>
             </div>
         </div>
         <div class="row mb-2">

@@ -27,24 +27,20 @@
     </div>
 
     <!-- Tender Preparation Form -->
-    <form th:action="@{/savetenderprepare}" th:object="${TenderPreparation}" method="post" class="needs-validation">
+    <form th:action="@{/tender/prepare}" th:object="${TenderPreparation}" method="post" class="needs-validation">
+        <input type="hidden" class="form-control" id="tenderNumber" name="tenderNumber" required>
 
-        <div class="row mb-2"  th:object="${tender}">
-            <div class="col-md-3">
-                <input type="hidden" class="form-control" th:value="${tender.id}"  id="tenderNumber" name="tenderNumber" required>
-            </div>
-        </div>
         <!-- Checklist Prepared By Section -->
         <div class="row mb-3">
             <div class="col-md-3">
                 <label for="checklistPreparedBy">Checklist Prepared By:</label>
             </div>
             <div class="col-md-3">
-                <input type="text" id="checklistPreparedBy" name="checklistPreparedBy" class="form-control" required />
+                <input type="text" th:value="${TenderPreparation != null ? TenderPreparation.checklistPreparedBy : 0}" id="checklistPreparedBy" name="checklistPreparedBy" class="form-control" required />
                 <input type="hidden" id="checklistPreparedById" name="checklistPreparedById">
             </div>
             <div class="col-md-3">
-                <input type="date" onblur="isValidDateFormat(this.id)" id="checklistPreparedByLastDate" name="checklistPreparedByLastDate" class="form-control" required />
+                <input type="date" onblur="isValidDateFormat(this.id)"  th:value="${TenderPreparation != null ? TenderPreparation.checklistPreparedByLastDate : 0}" id="checklistPreparedByLastDate" name="checklistPreparedByLastDate" class="form-control" required />
             </div>
         </div>
 
@@ -54,11 +50,11 @@
                 <label for="technicalPreparedBy">Technical Prepared By:</label>
             </div>
             <div class="col-md-3">
-                <input type="text" id="technicalPreparedBy" name="technicalPreparedBy" class="form-control" required />
+                <input type="text" id="technicalPreparedBy" name="technicalPreparedBy" th:value="${TenderPreparation != null ? TenderPreparation.technicalPreparedBy : 0}" class="form-control" required />
                 <input type="hidden" id="technicalPreparedById" name="technicalPreparedById">
             </div>
             <div class="col-md-3">
-                <input type="date" onblur="isValidDateFormat(this.id)" id="technicalPreparedByLastDate" name="technicalPreparedByLastDate" class="form-control" required />
+                <input type="date" onblur="isValidDateFormat(this.id)" id="technicalPreparedByLastDate" name="technicalPreparedByLastDate" th:value="${TenderPreparation != null ? TenderPreparation.technicalPreparedByLastDate : 0}" class="form-control" required />
             </div>
         </div>
 
@@ -68,11 +64,11 @@
                 <label for="financialPreparedBy">Financial Prepared By:</label>
             </div>
             <div class="col-md-3">
-                <input type="text" id="financialPreparedBy" name="financialPreparedBy" class="form-control" required />
+                <input type="text" id="financialPreparedBy" name="financialPreparedBy" class="form-control" th:value="${TenderPreparation != null ? TenderPreparation.financialPreparedBy : 0}" required />
                 <input type="hidden" id="financialPreparedById" name="financialPreparedById">
             </div>
             <div class="col-md-3">
-                <input type="date" onblur="isValidDateFormat(this.id)" id="financialPreparedByLastDate" name="financialPreparedByLastDate" class="form-control" required />
+                <input type="date" onblur="isValidDateFormat(this.id)" id="financialPreparedByLastDate" name="financialPreparedByLastDate" class="form-control" th:value="${TenderPreparation != null ? TenderPreparation.financialPreparedByLastDate : 0}" required />
             </div>
         </div>
 

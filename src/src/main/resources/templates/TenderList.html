@@ -107,7 +107,10 @@
                     <thead class="thead-dark">
                     <tr>
                         <th scope="col">Report Date</th>
-                        <th scope="col">Name of Work</th>
+                        <th scope="col">Client Name</th>
+                        <th scope="col">Due Date </th>
+                        <th scope="col">Tender Value</th>
+                        <th scope="col">Tender Status</th>
                         <th scope="col">Department</th>
                         <th scope="col">Actions</th>
                     </tr>
@@ -115,8 +118,12 @@
                     <tbody>
                     <tr th:each="emp: ${users}">
                         <td th:text="${emp.searchDate}"></td>
-                        <td th:text="${emp.organization}"></td>
                         <td th:text="${emp.clientName}"></td>
+                        <td th:text="${emp.bidValidity}"></td>
+                        <td th:text="${emp.tenderValue}"></td>
+                        <td th:text="${emp.status}"></td>
+                        <td th:text="${emp.department}"></td>
+
                         <td>
                             <a th:href="@{'/TenderFormEdit/' + ${emp.id}}" class="btn btn-sm btn-primary">View/Edit</a>
                             <a th:href="@{'/approveTenderForm/' + ${emp.id}}" class="btn btn-sm btn-warning">Approve/reject</a>

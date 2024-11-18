@@ -63,7 +63,7 @@
                 <label class=" col-form-label">Emd Date</label>
             </div>
             <div class="col-md-3">
-                <input type="date" maxlength="30" name="date" id="date" th:value="${feeApproval.EMDFeeDate}" class="form-control" readonly />
+                <input type="date" onblur="isValidDateFormat(this.id)" maxlength="30" name="date" id="date" th:value="${feeApproval.EMDFeeDate}" class="form-control" readonly />
             </div>
         </div>
 
@@ -75,7 +75,7 @@
             <label class=" col-form-label">EMD Validity</label>
             </div>
             <div class="col-md-3">
-                <input type="date" maxlength="30" name="emdValidity" id="emdValidity" th:value="${feeApproval.EMDFeeValidity}" class="form-control" readonly />
+                <input type="date" onblur="isValidDateFormat(this.id)" maxlength="30" name="emdValidity" id="emdValidity" th:value="${feeApproval.EMDFeeValidity}" class="form-control" readonly />
             </div>
 
             <div class="col-md-2 ml-3">
@@ -99,7 +99,7 @@
                 <label class=" col-form-label">Tender Date</label>
             </div>
             <div class="col-md-3">
-                <input type="date" maxlength="30" name="tenderStatusDate" id="tenderStatusDate" th:value="${bidEvaluation.finalDate}" class="form-control" readonly />
+                <input type="date" onblur="isValidDateFormat(this.id)" maxlength="30" name="tenderStatusDate" id="tenderStatusDate" th:value="${bidEvaluation.finalDate}" class="form-control" readonly />
             </div>
 
             <div class="col-md-2 mt-3">
@@ -241,7 +241,7 @@
                 <label class=" col-form-label">Remark Date</label>
             </div>
             <div class="col-md-3">
-                <input type="date" name="remarkDate" id="remarkDate" class="form-control"  />
+                <input type="date" onblur="isValidDateFormat(this.id)" name="remarkDate" id="remarkDate" class="form-control"  />
             </div>
         </div>
 
@@ -250,7 +250,7 @@
         <div class="row">
             <div class="col text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-secondary">Cancel</button>
+                <button type="reset" class="btn btn-secondary" onclick="window.location.href='/emd-monitoringlist'" >Cancel</button>
             </div>
         </div>
     </form>
@@ -283,126 +283,52 @@
      <!--operational branch-->
 
 
+$("#operationalBranch").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchBranchData",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#operationalBranch").val(ui.item.label);
+          $("#operationalBranch_id").val(ui.item.value);
+          return false;
+      }
+  });
 
-        $(document).ready(function() {
-    $("#operationalBranch").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchBranchData",
-                data: {
-                    query: request.term
-                },
-                success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            // Set the value of the #caseTitle input field
-            $("#operationalBranch").val(ui.item.label);
-            $("#operationalBranch_Id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
-        }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>Supplier</th><th>Supplier Id ID</th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
-
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
-
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
 
        <!-- branch manager -->
 
 
+$("#branchManager").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchuserDetails",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#branchManager").val(ui.item.label);
+          $("#branchManager_id").val(ui.item.value);
+          return false;
+      }
+  });
 
-        $(document).ready(function() {
-    $("#branchManager").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchuserDetails",
-                data: {
-                    query: request.term
-                },
-                success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            // Set the value of the #caseTitle input field
-            $("#branchManager").val(ui.item.label);
-            $("#branchManager_Id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
-        }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>Supplier</th><th>Supplier Id ID</th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
-
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
-
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
 
 </script>
 </body>

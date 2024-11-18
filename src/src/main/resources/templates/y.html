@@ -32,11 +32,11 @@
             </div>
             <div class="form-group">
                 <label for="pdate" class="col-form-label">Reported Date</label>
-                <input type="date" th:field="*{publishDate}" class="form-control" id="pdate">
+                <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{publishDate}" class="form-control" id="pdate">
             </div>
             <div class="form-group">
                 <label for="duedate" class="col-form-label">Due Date</label>
-                <input type="date" th:field="*{dueDate}" class="form-control" id="duedate">
+                <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{dueDate}" class="form-control" id="duedate">
             </div>
             <div class="form-group">
                 <label for="nameOfWork" class="col-form-label">Issue Detail</label>

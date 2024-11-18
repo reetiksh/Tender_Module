@@ -54,7 +54,7 @@
                 <label for="TenderFeeReceiveDate">Tender Fee Receive Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control"  th:value="${feeApproval != null ? feeApproval.TenderFeeReceiveDate : 0}"  id="TenderFeeReceiveDate" name="TenderFeeReceiveDate">
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control"  th:value="${feeApproval != null ? feeApproval.TenderFeeReceiveDate : 0}"  id="TenderFeeReceiveDate" name="TenderFeeReceiveDate">
             </div>
         </div>
         <div class="row mb-2"  id="Tenderfeemodeofpaymentrow" style="display:none;">
@@ -93,7 +93,7 @@
                 <label for="TenderFeeDate">Tender Fee Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control"  th:value="${feeApproval != null ? feeApproval.TenderFeeDate : 0}"   id="TenderFeeDate" name="TenderFeeDate" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control"  th:value="${feeApproval != null ? feeApproval.TenderFeeDate : 0}"   id="TenderFeeDate" name="TenderFeeDate" >
             </div>
         </div>
         <div class="row mb-2"  id="Tenderfeevalidityrow" style="display:none;">
@@ -102,7 +102,7 @@
             </div>
             <div class="col-md-3">
 
-                <input type="date" class="form-control" th:value="${feeApproval != null ? feeApproval.TenderFeeValidity : 0}"   id="TenderFeeValidity" name="TenderFeeValidity" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" th:value="${feeApproval != null ? feeApproval.TenderFeeValidity : 0}"   id="TenderFeeValidity" name="TenderFeeValidity" >
             </div>
         </div>
 
@@ -142,7 +142,7 @@
                 <label for="ProcessingFeeReceiveDate">Processing Fee Receive Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control"   th:value="${feeApproval != null ? feeApproval.ProcessingFeeReceiveDate : 0}"   id="ProcessingFeeReceiveDate" name="ProcessingFeeReceiveDate" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control"   th:value="${feeApproval != null ? feeApproval.ProcessingFeeReceiveDate : 0}"   id="ProcessingFeeReceiveDate" name="ProcessingFeeReceiveDate" >
             </div>
         </div>
         <div class="row mb-2" id="Processingfeemodeofpaymentrow" style="display:none;">
@@ -180,7 +180,7 @@
                 <label for="ProcessingFeeDate">Processing Fee Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control"   th:value="${feeApproval != null ? feeApproval.ProcessingFeeDate : 0}"   id="ProcessingFeeDate" name="ProcessingFeeDate" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control"   th:value="${feeApproval != null ? feeApproval.ProcessingFeeDate : 0}"   id="ProcessingFeeDate" name="ProcessingFeeDate" >
             </div>
         </div>
         <div class="row mb-2" id="Processingfeevalidityrow" style="display:none;">
@@ -188,7 +188,7 @@
                 <label for="ProcessingFeeValidity">ProcessingFeeValidity:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control"   th:value="${feeApproval != null ? feeApproval.ProcessingFeeValidity : 0}"   id="ProcessingFeeValidity" name="ProcessingFeeValidity" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control"   th:value="${feeApproval != null ? feeApproval.ProcessingFeeValidity : 0}"   id="ProcessingFeeValidity" name="ProcessingFeeValidity" >
             </div>
         </div>
 
@@ -235,7 +235,7 @@
                 <label for="EMDFeeReceiveDate">EMD Fee Receive Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control"  th:value="${feeApproval != null ? feeApproval.EMDFeeReceiveDate : 0}"   id="EMDFeeReceiveDate" name="EMDFeeReceiveDate" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control"  th:value="${feeApproval != null ? feeApproval.EMDFeeReceiveDate : 0}"   id="EMDFeeReceiveDate" name="EMDFeeReceiveDate" >
             </div>
         </div>
         <div class="row mb-2" id="EMDfeemodeofpaymentrow" style="display:none;">
@@ -273,7 +273,7 @@
                 <label for="EMDFeeDate">EMD Fee Date:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control" th:value="${feeApproval != null ? feeApproval.EMDFeeDate : 0}"    id="EMDFeeDate" name="EMDFeeDate" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" th:value="${feeApproval != null ? feeApproval.EMDFeeDate : 0}"    id="EMDFeeDate" name="EMDFeeDate" >
             </div>
         </div>
         <div class="row mb-2" id="EMDfeevalidityrow" style="display:none;">
@@ -281,15 +281,16 @@
                 <label for="EMDFeeValidity">EMDFeeValidity:</label>
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control"  th:value="${feeApproval != null ? feeApproval.EMDFeeValidity : 0}"   id="EMDFeeValidity" name="EMDFeeValidity" >
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control"  th:value="${feeApproval != null ? feeApproval.EMDFeeValidity : 0}"   id="EMDFeeValidity" name="EMDFeeValidity" >
             </div>
         </div>
 
 
-        <div class="row justify-content-center">
-            <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
-            <a href="#" class="btn btn-secondary h-auto w-auto ms-2" >Cancel</a>
-
+        <div class="row d-flex">
+            <div class="text-center">
+            <button type="submit" class="btn btn-primary ">Submit</button>
+            <button type="reset" class="btn btn-secondary" onclick="window.location.href='/FeeApprovallist'" >Cancel</button>
+            </div>
         </div>
 
     </form>

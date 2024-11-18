@@ -36,7 +36,7 @@
       <div class="form-group col-md-5 ml-auto" id="searchDateRow">
         <label for="searchDate">Search Date:</label>
         <input type="hidden" th:field="*{id}" class="form-control" id="id" name="id">
-        <input type="date" th:field="*{searchDate}" class="form-control" id="searchDate" name="searchDate">
+        <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{searchDate}" class="form-control" id="searchDate" name="searchDate">
       </div>
     </div>
 
@@ -44,28 +44,45 @@
     <div class="form-row mb-3" >
       <div class="form-group col-md-5" id="bidPublishDateRow">
         <label for="bidPublishDate">Bid Publish Date:</label>
-        <input type="date" th:field="*{bidPublishDate}"  class="form-control" id="bidPublishDate" name="bidPublishDate">
+        <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{bidPublishDate}"  class="form-control" maxlength="15"   id="bidPublishDate" name="bidPublishDate">
       </div>
-      <div class="form-group col-md-5 ml-auto" id="submissionDateAndTimeRow">
-        <label for="submissionDateAndTime">Submission Date and Time:</label>
-        <input type="datetime-local" th:field="*{submissionDateAndTime}" class="form-control" id="submissionDateAndTime" name="submissionDateAndTime">
+      <div class="form-group col-md-5 ml-auto" id="submissionDateRow">
+        <label for="submissionDate">Submission Date </label>
+        <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{submissionDate}" class="form-control" maxlength="15"  id="submissionDate" name="submissionDate" onchange="updateParticipatingMonth()">
       </div>
+    </div>
+
+    <!-- Bid Publish Date and Submission Date and Time -->
+    <div class="form-row mb-3" >
+
+      <div class="form-group col-md-5 " id="submissionTimeRow">
+        <label for="submissionTime">Submission Time </label>
+        <input type="time" onblur="isValidDateFormat(this.id)" th:field="*{submissionTime}" class="form-control" maxlength="15"  id="submissionTime" name="submissionTime" onchange="updateParticipatingMonth()">
+      </div>
+
+      <div class="form-group col-md-5 ml-auto" id="extendedDateRow">
+        <label for="extendedDate">Extended Date:</label>
+        <input type="datetime-local" maxlength="15" th:field="*{extendedDate}"  class="form-control" id="extendedDate" name="extendedDate">
+      </div>
+
     </div>
 
     <!-- Extended Date & Time and Participating Month -->
     <div class="form-row mb-3" >
-      <div class="form-group col-md-5" id="extendedDateAndTimeRow">
-        <label for="extendedDateAndTime">Extended Date & Time:</label>
-        <input type="datetime-local" class="form-control" th:field="*{extendedDateAndTime}" id="extendedDateAndTime" name="extendedDateAndTime">
+      <div class="form-group col-md-5" id="extendedTimeRow">
+        <label for="extendedTime">Extended Time:</label>
+        <input type="time" maxlength="15"  class="form-control" th:field="*{extendedTime}" id="extendedTime" name="extendedTime">
       </div>
       <div class="form-group col-md-5 ml-auto" id="participatingMonthRow">
         <label for="participatingMonth">Participating Month:</label>
-        <select class="form-control" th:field="*{participatingMonth}" id="participatingMonth" name="participatingMonth">
+        <select class="form-control"  id="participatingMonth" th:field="*{participatingMonth}" name="participatingMonth" disabled="true">
           <option value="">Select Month</option>
-          <!-- Add month options -->
+          <option th:each="month : ${months}" th:value="${month}" th:text="${month}">Month</option>
         </select>
       </div>
     </div>
+
+
 
     <!-- Submission Type and Bid Validity -->
     <div class="form-row mb-3" >
@@ -79,7 +96,7 @@
       </div>
       <div class="form-group col-md-5 ml-auto" id="bidValidityRow">
         <label for="bidValidity">Bid Validity:</label>
-        <input type="date"   th:field="*{bidValidity}" class="form-control" id="bidValidity" name="bidValidity">
+        <input type="date" onblur="isValidDateFormat(this.id)"   th:field="*{bidValidity}" class="form-control" id="bidValidity" name="bidValidity">
       </div>
     </div>
 
@@ -120,6 +137,7 @@
       <div class="form-group col-md-5 ml-auto" id="zoneRow">
         <label for="zone">Zone:</label>
         <input type="text" class="form-control"  th:field="*{zone}"   id="zone" name="zone">
+        <input type="hidden" class="form-control" id="zone_id" name="zone_id">
       </div>
     </div>
 
@@ -128,10 +146,13 @@
       <div class="form-group col-md-5" id="divisionRow">
         <label for="division">Division:</label>
         <input type="text" class="form-control"  th:field="*{division}"   id="division" name="division">
+        <input type="hidden" class="form-control" id="division_id" name="division_id" >
       </div>
       <div class="form-group col-md-5 ml-auto" id="departmentRow">
         <label for="department">Department:</label>
         <input type="text" class="form-control"  th:field="*{department}"  id="department" name="department">
+        <input type="hidden" class="form-control" id="department_id" name="department_id">
+
       </div>
     </div>
 
@@ -140,6 +161,7 @@
       <div class="form-group col-md-5" id="clientNameRow">
         <label for="clientName">Client Name:</label>
         <input type="text" class="form-control"  th:field="*{clientName}"   id="clientName" name="clientName">
+        <input type="hidden" class="form-control" id="clientName_id" name="clientName_id">
       </div>
       <div class="form-group col-md-5 ml-auto" id="clientLocationRow">
         <label for="clientLocation">Client Location:</label>
@@ -156,6 +178,8 @@
       <div class="form-group col-md-5 ml-auto" id="stateRow">
         <label for="state">State:</label>
         <input type="text" class="form-control" th:field="*{state}" id="state" name="state">
+        <input type="hidden" class="form-control" id="state_id" name="state_id">
+
       </div>
     </div>
 
@@ -164,6 +188,8 @@
       <div class="form-group col-md-5" id="operationalBranchRow">
         <label for="operationalBranch">Operational Branch:</label>
         <input type="text" class="form-control" th:field="*{operationalBranch}"  id="operationalBranch" name="operationalBranch">
+        <input type="hidden" class="form-control" id="operationalBranch_id" name="operationalBranch_id">
+
       </div>
       <div class="form-group col-md-5 ml-auto" id="scopeOfWorkRow">
         <label for="scopeOfWork">Scope of Work:</label>
@@ -176,6 +202,8 @@
       <div class="form-group col-md-5" id="natureOfWorkRow">
         <label for="natureOfWork">Nature of Work:</label>
         <input type="text" class="form-control" th:field="*{natureOfWork}" id="natureOfWork" name="natureOfWork">
+        <input type="hidden" class="form-control" id="natureOfWork_id" name="natureOfWork_id">
+
       </div>
       <div class="form-group col-md-5 ml-auto" id="similarNatureRow">
         <label for="similarNature">Similar Nature:</label>
@@ -255,7 +283,7 @@
         <div class="form-row mb-3" >
           <div class="form-group col-md-5" id="tenderValidityRow">
             <label for="tenderValidity">Validity:</label>
-            <input type="date" class="form-control" id="tenderValidity"  th:field="*{tenderValidity}"  name="tenderValidity">
+            <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" id="tenderValidity"  th:field="*{tenderValidity}"  name="tenderValidity">
           </div>
         </div>
       </div>
@@ -548,10 +576,11 @@
       <input type="file" class="form-control-file" id="supportingDocs" name="supportingDocs" multiple />
     </div>
 
-    <!-- Submit and Cancel buttons -->
-    <div class="row justify-content-center">
-      <button type="submit" class="btn btn-primary mr-2">Submit</button>
-      <button type="reset" class="btn btn-secondary">Cancel</button>
+    <div class="row d-flex ">
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+        <button type="reset" class="btn btn-secondary" onclick="window.location.href='/Tenderlist'" >Cancel</button>
+      </div>
     </div>
   </form>
 </div>
@@ -580,6 +609,21 @@
           })
           .catch(error => console.error('Error fetching component visibility:', error));
   });
+
+  function toggleExemted(that){
+        const status = that.value;
+        const componentid= that.id.split("ExemptedOfUs")[0];
+      const Exempted = document.getElementById(componentid+'ModeOFPaymentRow');
+
+      if (status === '1') {
+      Exempted.style.display = 'none';
+          }
+  else if(status === '0'){
+   Exempted.style.display = 'block';
+  }
+
+
+}
 
   // JavaScript functions to handle Mode of Payment field changes
   function toggleTenderFeePaymentFields() {
@@ -635,6 +679,7 @@
   }
 
   function toggleEmdPaymentFields() {
+  debugger;
       const modeOfPayment = document.getElementById('emdModeOFPayment').value;
 
       // Get all the conditional fields
@@ -659,7 +704,253 @@
           rtgsFieldsIFSC.style.display = 'block';
       }
   }
+
+
+$("#zone").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchAllZone",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#zone").val(ui.item.label);
+          $("#zone_id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
+
+<!--deprtment-->
+$("#department").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchAllDepartment",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#department").val(ui.item.label);
+          $("#department_id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
+
+
+
+  <!--state-->
+  $("#state").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchAllstate",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#state").val(ui.item.label);
+          $("#state_id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
+
+<!--client-->
+
+$("#clientName").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchAssupmstDetails",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#clientName").val(ui.item.label);
+          $("#clientName_id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
+
+
+
+
+  <!--division-->
+$("#division").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchDivisionData",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#division").val(ui.item.label);
+          $("#division_id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
+  <!--operational branch-->
+
+$("#operationalBranch").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchBranchData",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#operationalBranch").val(ui.item.label);
+          $("#operationalBranch_id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
+
+
+
+  <!--nature of work-->
+
+$("#natureOfWork").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchNatureOfWork",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#natureOfWork").val(ui.item.label);
+          $("#natureOfWork_Id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
+  function updateParticipatingMonth() {
+      const submissionDate = document.getElementById('submissionDateAndTime').value;
+      const participatingMonthSelect = document.getElementById('participatingMonth');
+
+      if (submissionDate) {
+          // Extract the month from the submission date
+          const date = new Date(submissionDate);
+          const month = date.toLocaleString('default', { month: 'long' });
+
+          // Set the participating month based on the extracted month
+          for (let i = 0; i < participatingMonthSelect.options.length; i++) {
+              if (participatingMonthSelect.options[i].text === month) {
+                  participatingMonthSelect.selectedIndex = i;
+                  break;
+              }
+          }
+      } else {
+          participatingMonthSelect.selectedIndex = 0; // Default to "Select Month"
+      }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+      // Attach event listeners for date validation
+      document.getElementById("submissionDateAndTime").addEventListener("change", validateDates);
+      document.getElementById("bidPublishDate").addEventListener("change", validateDates);
+      document.getElementById("extendedDateAndTime").addEventListener("change", validateDates);
+      document.getElementById("searchDate").addEventListener("change", validateDates);
+
+      // Form submission validation
+      document.querySelector("form").onsubmit = function(event) {
+          if (!validateDates()) {
+              event.preventDefault();
+          }
+      };
+  });
+
+  function validateDates() {
+      const bidPublishDate = new Date(document.getElementById("bidPublishDate").value);
+      const submissionDate = new Date(document.getElementById("submissionDateAndTime").value);
+      const extendedDate = new Date(document.getElementById("extendedDateAndTime").value);
+      const searchDate = new Date(document.getElementById("searchDate").value);
+      let isValid = true;
+      let errorMessage = "";
+
+      // Check if Bid Publish Date is less than Submission Date
+      if (bidPublishDate >= submissionDate) {
+          errorMessage += "Bid Publish Date should be earlier than Submission Date.\n";
+          isValid = false;
+      }
+
+      // Check if Extended Date is greater than Submission Date
+      if (extendedDate <= submissionDate) {
+          errorMessage += "Extended Date should be later than Submission Date.\n";
+          isValid = false;
+      }
+      // Check if Bid Publish Date is greater than Search Date
+       if (bidPublishDate >= searchDate) {
+          errorMessage += "Search Date should be later than Bid Publish Date.\n";
+          isValid = false;
+      }
+      if (!isValid) {
+          alert(errorMessage); // Display the error message
+      }
+
+      return isValid;
+  }
 </script>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
 <!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

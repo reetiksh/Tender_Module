@@ -19,18 +19,18 @@ function ValidateAlpha(evt)
 //Allow only Alphanumeric keys
 function isValidNumAlpha(evt)
 {
-
+	
 	var keyCode = (evt.which) ? evt.which : evt.keyCode
 	if ((keyCode>=65 || keyCode<=90) && (keyCode>=97 || keyCode<=122) && (keyCode==32) && (keyCode>=48 || keyCode<=57))
 		return false;
-
+	
 	return true;
 }
 
 //Only numeric keys
 function isNumberKey(evt)
 {
-
+	   
 	   var keyCode = (evt.which) ? evt.which : evt.keyCode;
 	   if (keyCode != 46 && keyCode > 31 && (keyCode < 48 || keyCode > 57))
        return false;
@@ -75,34 +75,34 @@ $(function(){
 		  });
 	});
 
-function dateComparision(dmax,dmin)
+function dateComparision(dmax,dmin)  
 {
    var fDate = document.getElementById(dmax).value;
    var sDate =  document.getElementById(dmin).value;
-
+  
       var Month1 = fDate.substring(3,5);
    var Day1 =   fDate.substring(0,2);
    var Year1 =  fDate.substring(6,10);
-
+  
 
    var Month2 = sDate.substring(3,5);
    var Day2 =   sDate.substring(0,2);
    var Year2 =  sDate.substring(6,10);
+  
 
-
-
+   
 //if((Year1>Year2)||((Year1==Year2)&&(Month1 > Month2)) || (((Year1==Year2) && (Month1 == Month2) && Day1 >  Day2)))
 if((Year1>Year2)||   ((Year1==Year2)&&(Month1 > Month2)) || ((  (Year1==Year2) && (Month1 == Month2) && (Day1 > Day2 || Day1 == Day2 ))))
    return true;
 else
-         return false;
+         return false; 
 
 }
 function daysDifference(st_date,end_date)
 {
 
-	var str_st_date  = document.getElementById(st_date).value;
-	var str_end_date = document.getElementById(end_date).value;
+	var str_st_date  = document.getElementById(st_date).value; 
+	var str_end_date = document.getElementById(end_date).value;		
 
 	var str_day1   = str_st_date.substring(0,2);
 	var str_month1 = str_st_date.substring(3,5);
@@ -131,7 +131,7 @@ function daysDifference(st_date,end_date)
 		return 0;
 	}
 	if(yeardiff==0&&monthdiff==0)
-	{
+	{   
 		return daydiff;
 	}
 
@@ -142,7 +142,7 @@ function daysDifference(st_date,end_date)
 
 	}
 	if(yeardiff == 1)
-	{
+	{				
 		count = count + 12 - month1 ;
 		count = count + month2;
 
@@ -192,7 +192,7 @@ function daysDifference(st_date,end_date)
 
 		default : alert("Invalid Month...");
 		break;
-		}
+		}			
 
 		if(start_month == 12)
 		{
@@ -207,7 +207,7 @@ function daysDifference(st_date,end_date)
 			count = count - 1;
 			start_month = start_month + 1;
 		}
-	}
+	}				
 
 	daycount = daycount + day2;
 
@@ -215,21 +215,23 @@ function daysDifference(st_date,end_date)
 	return daycount;
 
 }
-function  isValidDateFormat(date)
-{
-	var date = document.getElementById(date).value;
+function  isValidDateFormat(dateID)
+{   
+	var date = document.getElementById(dateID).value;
 
-	var m = date.substring(3,5);
-	var d = date.substring(0,2);
-	var y = date.substring(6,10);
+	var m = date.substring(5,7);
+	var d = date.substring(8,10);
+	var y = date.substring(0,4);
 
 	if(parseInt(d) < 10)
 		d="0"+d;
 	if(parseInt(m) < 10)
 		m="0"+m;
 
-	if((date.length > 10) ||((date.charAt(2)!="-") &&(date.charAt(2)!="/"))||((date.charAt(5)!="-")&&(date.charAt(5)!="/"))||(d>31) ||(m>12) ||(y<1900))
+	if((date.length > 10) ||((date.charAt(4)!="-") &&(date.charAt(4)!="/"))||((date.charAt(7)!="-")&&(date.charAt(7)!="/"))||(d>31) ||(m>12) ||(y<1900) || (y>3000))
 	{
+	document.getElementById(dateID).value='';
+	alert("invalid Date")
 		return false;
 	}
 	else{
@@ -249,7 +251,7 @@ function  isValidDateFormat(date)
 			var dmax = 31;
 
 		}
-		else
+		else 
 			if (m==04||m==06||m==09||m==11)
 			{
 				var dmax = 30;
@@ -310,7 +312,7 @@ function isValidEMail(controlId){
 		document.getElementById(controlId).value="";
 	}
 }
-//Trims a string
+//Trims a string 
 function trim(str1){
 	var str = new String(str1)
 	while(str.indexOf(' ')==0){
@@ -339,11 +341,11 @@ function isValidUserId(evt,fld){
 		return true;
 	else if(keyCode==64)
 		return true;
-
+	
 	return false;
 }
 function newValidateAlpha(evt)
-{
+{     
 	var keyCode = (evt.which) ? evt.which : evt.keyCode
 	if ((keyCode < 48 || keyCode > 57) && (keyCode < 65 || keyCode > 90) && (keyCode < 97 || keyCode > 123) && (keyCode != 32))
 		return false;

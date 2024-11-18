@@ -70,7 +70,7 @@
 
 
       <div class="col-md-3">
-        <input type="date" id="technicalDate" maxlength="15"  th:field="${bidEvaluation.technicalDate}"  name="technicalDate" class="form-control">
+        <input type="date" onblur="isValidDateFormat(this.id)" id="technicalDate" maxlength="15"  th:field="${bidEvaluation.technicalDate}"  name="technicalDate" class="form-control">
       </div>
     </div>
 
@@ -105,7 +105,7 @@
         </select>
       </div>
       <div class="col-md-3">
-        <input type="date" maxlength="15"  id="financialDate" th:field="${bidEvaluation.financialDate}" name="financialDate" class="form-control">
+        <input type="date" onblur="isValidDateFormat(this.id)" maxlength="15"  id="financialDate" th:field="${bidEvaluation.financialDate}" name="financialDate" class="form-control">
       </div>
     </div>
 
@@ -216,7 +216,7 @@
         </select>
       </div>
       <div class="col-md-3">
-        <input type="date" id="awardedDate" name="awardedDate" th:field="*{awardedDate}" class="form-control">
+        <input type="date" onblur="isValidDateFormat(this.id)" id="awardedDate" name="awardedDate" th:field="*{awardedDate}" class="form-control">
       </div>
     </div>
 
@@ -244,7 +244,7 @@
         </select>
       </div>
       <div class="col-md-3">
-        <input type="date" th:field="${bidEvaluation.finalDate}" id="finalDate" name="finalDate" class="form-control">
+        <input type="date" onblur="isValidDateFormat(this.id)" th:field="${bidEvaluation.finalDate}" id="finalDate" name="finalDate" class="form-control">
       </div>
     </div>
 

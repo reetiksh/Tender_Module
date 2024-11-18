@@ -62,7 +62,7 @@
       </div>
       <div class="col-md-3">
         <input type="text" th:value="${Survey != null ? Survey.surveyUnit : 0}" id="surveyUnit" name="surveyUnit" class="form-control" oninput="limitDigits(this, 30)"/>
-        <input type="hidden" id="survey_id" name="survey_id"/>
+        <input type="hidden" id="surveyUnit_id" name="survey_id"/>
       </div>
     </div>
 
@@ -71,7 +71,7 @@
         <label for="surveySendDate">Survey Send Date</label>
       </div>
       <div class="col-md-3">
-        <input type="date" th:value="${Survey != null ? Survey.surveySendDate : 0}" id="surveySendDate" name="surveySendDate" class="form-control" oninput="limitDigits(this, 30)"/>
+        <input type="date" onblur="isValidDateFormat(this.id)" th:value="${Survey != null ? Survey.surveySendDate : 0}" id="surveySendDate" name="surveySendDate" class="form-control" oninput="limitDigits(this, 30)"/>
       </div>
     </div>
 
@@ -106,7 +106,7 @@
         <label for="surveyReceiveDate">Survey Received Date</label>
       </div>
       <div class="col-md-3">
-        <input type="date" th:value="${Survey != null ? Survey.surveyReceiveDate: 0}" id="surveyReceiveDate" name="surveyReceiveDate" class="form-control" oninput="limitDigits(this, 30)"/>
+        <input type="date" onblur="isValidDateFormat(this.id)" th:value="${Survey != null ? Survey.surveyReceiveDate: 0}" id="surveyReceiveDate" name="surveyReceiveDate" class="form-control" oninput="limitDigits(this, 30)"/>
 
       </div>
     </div>
@@ -186,6 +186,34 @@ function limitDigits(input, maxDigits) {
    input.value = input.value.slice(0, maxDigits);
  }
 }
+
+      <!-- survey Unit-->
+$("#surveyUnit").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchuserDetails",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#surveyUnit").val(ui.item.label);
+          $("#surveyUnit_id").val(ui.item.value);
+          return false;
+      }
+  });
+
+
 </script>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -64,7 +64,7 @@
             font-weight: bold;
         }
         input[type="text"],
-        input[type="date"] {
+        input[type="date" onblur="isValidDateFormat(this.id)"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ced4da;
@@ -100,11 +100,11 @@
             </div>
             <div class="form-group">
                 <label for="pdate">Reported Date</label>
-                <input type="date" th:field="*{publishDate}" id="pdate">
+                <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{publishDate}" id="pdate">
             </div>
             <div class="form-group">
                 <label for="duedate">Due Date</label>
-                <input type="date" th:field="*{dueDate}" id="duedate">
+                <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{dueDate}" id="duedate">
             </div>
             <div class="form-group">
                 <label for="nameOfWork">Description</label>

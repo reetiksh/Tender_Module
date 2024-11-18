@@ -62,7 +62,7 @@
                         <td style="padding: 10px; border: 1px solid #ccc;" th:text="${activity.activity}" ></td>
                         <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.status}"></td>-->
                         <td style="padding: 10px; border: 1px solid #ccc;"><input type="text" name="users" placeholder="User" th:id="${'user' + iterStat.index}"/></td>
-                        <td style="padding: 10px; border: 1px solid #ccc;"><input type="date" name="dueDates" placeholder="Due Date" th:id="${'dueDate' + iterStat.index}"/>
+                        <td style="padding: 10px; border: 1px solid #ccc;"><input type="date" onblur="isValidDateFormat(this.id)" name="dueDates" placeholder="Due Date" th:id="${'dueDate' + iterStat.index}"/>
 
 
                         </td>

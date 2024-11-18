@@ -24,7 +24,7 @@ public class Survey {
     private String tenderNumber;
     private String surveyRequired;
     private String surveyUnit;
-    private String survey_id;
+    private String surveyUnit_id;
     private String surveySendDate;
     private String surveyorName;
     private String surveyorName_id;
@@ -67,12 +67,12 @@ public class Survey {
         this.surveyUnit = surveyUnit;
     }
 
-    public String getSurvey_id() {
-        return survey_id;
+    public String getSurveyUnit_id() {
+        return surveyUnit_id;
     }
 
-    public void setSurvey_id(String survey_id) {
-        this.survey_id = survey_id;
+    public void setSurveyUnit_id(String surveyUnit_id) {
+        this.surveyUnit_id = surveyUnit_id;
     }
 
     public String getSurveySendDate() {

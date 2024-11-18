@@ -35,6 +35,11 @@
 <body layout:fragment="content">
 <div class="container mt-5">
     <h2>Bid Evaluation Form</h2>
+
+
+
+
+        <!-- Bid Evaluation Form -->
     <form th:action="@{/bid-evaluation}" th:object="${bidEvaluation}" method="post">
 
         <div class="row mb-2"  th:object="${tender}">
@@ -48,6 +53,8 @@
         <div class="row mb-2">
             <div class="col-md-3">
                 <label for="technicalStatus">Technical Evaluation</label>
+                <label th:text="${tender.eligibility}"></label>
+
             </div>
             <div class="col-md-3" th:if="${bidEvaluation != null}">
                 <select id="technicalStatus" name="technicalStatus"  class="form-control"  onchange="togglePaymentFields(this)" required>
@@ -68,7 +75,7 @@
 
 
             <div class="col-md-3">
-                <input type="date" maxlength="15" id="technicalDate"   name="technicalDate" class="form-control">
+                <input type="date" onblur="isValidDateFormat(this.id)" maxlength="15" id="technicalDate"   name="technicalDate" class="form-control">
             </div>
         </div>
 
@@ -103,7 +110,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <input type="date" maxlength="15"  id="financialDate"  name="financialDate" class="form-control">
+                <input type="date" onblur="isValidDateFormat(this.id)" maxlength="15"  id="financialDate"  name="financialDate" class="form-control">
             </div>
         </div>
 
@@ -183,7 +190,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <input type="date" maxlength="15"  id="awardedDate" name="awardedDate" class="form-control">
+                <input type="date" onblur="isValidDateFormat(this.id)" maxlength="15"  id="awardedDate" name="awardedDate" class="form-control">
             </div>
         </div>
 
@@ -211,7 +218,7 @@
                 </select>
             </div>
             <div class="col-md-3">
-                <input type="date" maxlength="15"   id="finalDate" name="finalDate" class="form-control">
+                <input type="date" onblur="isValidDateFormat(this.id)" maxlength="15"   id="finalDate" name="finalDate" class="form-control">
             </div>
         </div>
 
@@ -222,6 +229,7 @@
         </div>
     </form>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="assets/js/jquery-3.7.1.min.js"></script>
 

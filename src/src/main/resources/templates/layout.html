@@ -215,6 +215,11 @@ transform: rotate(180deg);
     .nav__name{
         padding-left:10px !important;
     }
+   .header {
+
+    background: linear-gradient(to right, #281270 0%, #1c61bd 100%) !important;
+
+}
 
   </style>
 
@@ -736,7 +741,7 @@ transform: rotate(180deg);
         .header-title img {
             height: 44px;
             margin-right: 10px;
-            width: 163px;
+            width: 50px;
         }
 
     .collapse__sublink {
@@ -785,6 +790,7 @@ transition: padding-left 0.3s;
   <!-- Lineawesome CSS -->
   <link th:href="@{/assets/css/line-awesome.min.css}" rel="stylesheet">
   <link th:href="@{/assets/css/material.css}" rel="stylesheet">
+  <link th:href="@{/assets/css/icon.css}" rel="stylesheet">
 
   <!-- Select2 CSS -->
   <link th:href="@{/assets/css/select2.min.css}" rel="stylesheet">
@@ -803,70 +809,14 @@ transition: padding-left 0.3s;
 <body>
 <header class="header">
   <div class="header-title">
-    <img src="~/imges/download.jfif" alt="Logo"> <!-- Add your logo image here -->
+    <img src="/images/images.png" alt="Logo"> <!-- Add your logo image here -->
     <i class=""></i> Tender Management
   </div>
   <ul class="header-menu">
     <li class="menu-item"><a href="#" class="menu-link">Home</a></li>
-    <li class="menu-item"><a href="#" class="menu-link">About</a></li>
-    <li class="menu-item"><a href="#" class="menu-link">Contact</a></li>
+
   </ul>
 </header>
-
-<div class="l-navbar" id="navbar">
-  <nav class="nav">
-    <div>
-
-      <div class="nav__brand">
-        <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-      </div>
-      <div class="nav__list">
-        <a href="Tenderlist" class="nav__link active">
-          <i class="fas fa-table fa-2x"></i>
-          <span class="nav__name">Dashboard</span>
-        </a>
-        <a href="#" class="nav__link">
-          <i class="fas fa-comments fa-2x"></i>
-          <span class="nav__name">Tender Approve</span>
-        </a>
-        <div class="nav__link collapse">
-          <i class="fas fa-folder fa-2x"></i>
-          <span class="nav__name">Projects</span>
-          <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
-          <ul class="collapse__menu">
-            <a href="#" class="collapse__sublink">Data</a>
-            <a href="#" class="collapse__sublink">Group</a>
-            <a href="#" class="collapse__sublink">Members</a>
-          </ul>
-        </div>
-        <a href="#" class="nav__link">
-          <i class="fas fa-chart-line fa-2x"></i>
-          <span class="nav__name">Analytics</span>
-        </a>
-        <div class="nav__link collapse">
-          <i class="fas fa-users fa-2x"></i>
-          <span class="nav__name">Team</span>
-          <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
-          <ul class="collapse__menu">
-            <a href="#" class="collapse__sublink">Data</a>
-            <a href="#" class="collapse__sublink">Group</a>
-            <a href="#" class="collapse__sublink">Members</a>
-          </ul>
-        </div>
-        <a href="#" class="nav__link">
-          <i class="fas fa-cog fa-2x"></i>
-          <span class="nav__name">Settings</span>
-        </a>
-      </div>
-
-      <a href="#" class="nav__link">
-        <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
-        <span class="nav__name">Log Out</span>
-      </a>
-    </div>
-
-  </nav>
-</div>
 
 <main class="dashboard" role="main" id="main-content" style="overflow-y:auto">
   <div class="content" layout:fragment="content">
@@ -985,12 +935,13 @@ transition: padding-left 0.3s;
 <script src="https://unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script th:src="@{assets/js/jquery-3.7.1.min.js}"></script>
+<script th:src="@{/assets/js/jquery-3.7.1.min.js}"></script>
 
 <!-- Bootstrap Core JS -->
-<script th:src="@{assets/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
-<script th:src="@{assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalert2.all.min.js}"></script>
+<script th:src="@{/assets/plugins/sweetalert/sweetalerts.min.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <!-- Datetimepicker JS -->
 <script th:src="@{assets/js/moment.min.js}"></script>

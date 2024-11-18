@@ -44,9 +44,11 @@ public class Tender {
     private String eligibility;
     private String searchDate;
     private String bidPublishDate;
-    private String submissionDateAndTime;
+    private String submissionTime;
+    private String submissionDate;
 
-    private String extendedDateAndTime;
+    private String extendedDate;
+    private String extendedTime;
     private String participatingMonth;
     private String submissionType;
     private String bidValidity;
@@ -117,6 +119,11 @@ public class Tender {
     private String tenderContactContact;
     private String status;
     private String rejectReason;
+
+
+
+
+
 
     public String getRejectReason() {
         return rejectReason;
@@ -357,13 +364,6 @@ public class Tender {
         this.eligibility = eligibility;
     }
 
-    public String getExtendedDateAndTime() {
-        return extendedDateAndTime;
-    }
-
-    public void setExtendedDateAndTime(String extendedDateAndTime) {
-        this.extendedDateAndTime = extendedDateAndTime;
-    }
 
     public String getParticipatingMonth() {
         return participatingMonth;
@@ -575,13 +575,7 @@ public class Tender {
         this.bidPublishDate = bidPublishDate;
     }
 
-    public String getSubmissionDateAndTime() {
-        return submissionDateAndTime;
-    }
 
-    public void setSubmissionDateAndTime(String submissionDateAndTime) {
-        this.submissionDateAndTime = submissionDateAndTime;
-    }
 
 
 
@@ -855,5 +849,37 @@ public class Tender {
 
     public void setEmdModeOFPayment(String emdModeOFPayment) {
         this.emdModeOFPayment = emdModeOFPayment;
+    }
+
+    public String getSubmissionTime() {
+        return submissionTime;
+    }
+
+    public void setSubmissionTime(String submissionTime) {
+        this.submissionTime = submissionTime;
+    }
+
+    public String getSubmissionDate() {
+        return submissionDate;
+    }
+
+    public void setSubmissionDate(String submissionDate) {
+        this.submissionDate = submissionDate;
+    }
+
+    public String getExtendedDate() {
+        return extendedDate;
+    }
+
+    public void setExtendedDate(String extendedDate) {
+        this.extendedDate = extendedDate;
+    }
+
+    public String getExtendedTime() {
+        return extendedTime;
+    }
+
+    public void setExtendedTime(String extendedTime) {
+        this.extendedTime = extendedTime;
     }
 }

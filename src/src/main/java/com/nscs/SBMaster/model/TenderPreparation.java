@@ -20,7 +20,7 @@ public class TenderPreparation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String tenderNumber;
     private String checklistPreparedBy;
     private String technicalPreparedBy;
     private String financialPreparedBy;
@@ -124,5 +124,13 @@ public class TenderPreparation {
 
     public void setFinancialPreparedBy(String financialPreparedBy) {
         this.financialPreparedBy = financialPreparedBy;
+    }
+
+    public String getTenderNumber() {
+        return tenderNumber;
+    }
+
+    public void setTenderNumber(String tenderNumber) {
+        this.tenderNumber = tenderNumber;
     }
 }

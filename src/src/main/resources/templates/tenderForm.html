@@ -38,7 +38,7 @@
             <!-- Search Date -->
             <div class="form-group col-md-5 ml-auto" id="searchDateRow">
                 <label for="searchDate">Search Date:</label>
-                <input type="date" class="form-control" maxlength="15" id="searchDate" name="searchDate">
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" maxlength="15" id="searchDate" name="searchDate">
             </div>
         </div>
 
@@ -46,20 +46,33 @@
         <div class="form-row mb-3" >
             <div class="form-group col-md-5" id="bidPublishDateRow">
                 <label for="bidPublishDate">Bid Publish Date:</label>
-                <input type="date" class="form-control" maxlength="15"  id="bidPublishDate" name="bidPublishDate">
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" maxlength="15"   id="bidPublishDate" name="bidPublishDate">
             </div>
-            <div class="form-group col-md-5 ml-auto" id="submissionDateAndTimeRow">
-                <label for="submissionDateAndTime">Submission Date and Time:</label>
-                <input type="datetime-local" class="form-control" maxlength="15"  id="submissionDateAndTime" name="submissionDateAndTime" onchange="updateParticipatingMonth()">
+            <div class="form-group col-md-5 ml-auto" id="submissionDateRow">
+                <label for="submissionDate">Submission Date </label>
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" maxlength="15"  id="submissionDate" name="submissionDate" onchange="updateParticipatingMonth()">
+            </div>
+        </div>
+
+        <!-- Bid Publish Date and Submission Date and Time -->
+        <div class="form-row mb-3" >
+            <div class="form-group col-md-5 " id="submissionTimeRow">
+                <label for="submissionTime">Submission Time </label>
+                <input type="time" class="form-control" maxlength="15"  id="submissionTime" name="submissionTime" onchange="updateParticipatingMonth()">
+            </div>
+            <div class="form-group col-md-5 ml-auto" id="extendedDateRow">
+                <label for="extendedDate">Extended Date:</label>
+                <input type="datetime-local" maxlength="15"  class="form-control" id="extendedDate" name="extendedDate">
             </div>
         </div>
 
         <!-- Extended Date & Time and Participating Month -->
         <div class="form-row mb-3" >
-            <div class="form-group col-md-5" id="extendedDateAndTimeRow">
-                <label for="extendedDateAndTime">Extended Date & Time:</label>
-                <input type="datetime-local" maxlength="15"  class="form-control" id="extendedDateAndTime" name="extendedDateAndTime">
+            <div class="form-group col-md-5" id="extendedTimeRow">
+                <label for="extendedTime">Extended Time:</label>
+                <input type="time" maxlength="15"  class="form-control" id="extendedTime" name="extendedTime">
             </div>
+
             <div class="form-group col-md-5 ml-auto" id="participatingMonthRow">
                 <label for="participatingMonth">Participating Month:</label>
                 <select class="form-control"  id="participatingMonth" name="participatingMonth" disabled="true">
@@ -67,6 +80,11 @@
                     <option th:each="month : ${months}" th:value="${month}" th:text="${month}">Month</option>
                 </select>
             </div>
+        </div>
+
+        <!-- Extended Date & Time and Participating Month -->
+        <div class="form-row mb-3" >
+
         </div>
 
         <!-- Submission Type and Bid Validity -->
@@ -82,7 +100,7 @@
             </div>
             <div class="form-group col-md-5 ml-auto" id="bidValidityRow">
                 <label for="bidValidity">Bid Validity:</label>
-                <input type="date" class="form-control" maxlength="15"  id="bidValidity" name="bidValidity">
+                <input type="date" onblur="isValidDateFormat(this.id)" class="form-control" maxlength="15"  id="bidValidity" name="bidValidity">
             </div>
         </div>
 
@@ -116,7 +134,6 @@
             </div>
             <div class="form-group col-md-5 ml-auto" id="organizationRow">
                 <label for="organization">Organization:</label>
-                <!--                <input type="text" class="form-control" id="organization" name="organization">-->
                 <select id="organization" name="organization" class="form-control">
                     <option value="">Select</option>
                     <option value="Railway">Railway</option>
@@ -129,26 +146,54 @@
         <div class="form-row mb-3">
             <div class="form-group col-md-5" id="sectorRow">
                 <label for="sector">Sector:</label>
-                <input type="text" maxlength="15"  class="form-control" id="sector" name="sector">
-            </div>
+                <div class="input-group">
+                <input type="text" maxlength="15"  class="form-control" id="sector" name="sector" title="Please enter your master">
+                <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+                    </div>
+                 </div>
+                </div>
             <div class="form-group col-md-5 ml-auto" id="zoneRow">
                 <label for="zone">Zone:</label>
-                <input type="text" maxlength="15"  class="form-control" id="zone" name="zone">
+                <div class="input-group">
+                <input type="text" maxlength="15"  class="form-control" id="zone" name="zone" title="Please enter your master">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+                    </div>
+                </div>
+                </div>
                 <input type="hidden" class="form-control" id="zone_id" name="zone_id">
             </div>
-        </div>
 
         <!-- Division and Department -->
-        <div class="form-row mb-3" >
+        <div class="form-row mb-3">
             <div class="form-group col-md-5" id="divisionRow">
                 <label for="division">Division:</label>
-                <input type="text" maxlength="15"  class="form-control" id="division" name="division">
+                <div class="input-group">
+                    <input type="text" maxlength="15" class="form-control" id="division" name="division" title="Please enter your master">
+                    <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="fa-solid fa-briefcase"></i>
+                </span>
+                    </div>
+                </div>
                 <input type="hidden" class="form-control" id="division_id" name="division_id">
-
             </div>
+
             <div class="form-group col-md-5 ml-auto" id="departmentRow">
                 <label for="department">Department:</label>
-                <input type="text" maxlength="15"  class="form-control" id="department" name="department">
+                <div class="input-group">
+                <input type="text" maxlength="15"  class="form-control" id="department" name="department" title="Please enter your master">
+                <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+                </div>
+                    </div>
                 <input type="hidden" class="form-control" id="department_id" name="department_id">
             </div>
         </div>
@@ -157,7 +202,14 @@
         <div class="form-row mb-3" >
             <div class="form-group col-md-5" id="clientNameRow">
                 <label for="clientName">Client Name:</label>
-                <input type="text" maxlength="15"  class="form-control" id="clientName" name="clientName">
+                <div class="input-group">
+                <input type="text" maxlength="15"  class="form-control" id="clientName" name="clientName" title="Please enter your master">
+                <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+                </div>
+                </div>
                 <input type="hidden" class="form-control" id="clientName_id" name="clientName_id">
             </div>
             <div class="form-group col-md-5 ml-auto" id="clientLocationRow">
@@ -174,7 +226,7 @@
             </div>
             <div class="form-group col-md-5 ml-auto" id="stateRow">
                 <label for="state">State:</label>
-                <input type="text" maxlength="15"  class="form-control" id="state" name="state">
+                <input type="text" maxlength="15"  class="form-control" id="state" name="state" title="Please enter your master">
                 <input type="hidden" class="form-control" id="state_id" name="state_id">
 
             </div>
@@ -184,7 +236,15 @@
         <div class="form-row mb-3" >
             <div class="form-group col-md-5" id="operationalBranchRow">
                 <label for="operationalBranch">Operational Branch:</label>
-                <input type="text" maxlength="15"  class="form-control" id="operationalBranch" name="operationalBranch">
+                <div class="input-group">
+
+                <input type="text" maxlength="15"  class="form-control" id="operationalBranch" name="operationalBranch" title="Please enter your master">
+                <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+                      </div>
+                    </div>
                 <input type="hidden" class="form-control" id="operationalBranch_id" name="operationalBranch_id">
             </div>
             <div class="form-group col-md-5 ml-auto" id="scopeOfWorkRow">
@@ -197,7 +257,14 @@
         <div class="form-row mb-3" >
             <div class="form-group col-md-5" id="natureOfWorkRow">
                 <label for="natureOfWork">Nature of Work:</label>
-                <input type="text" maxlength="15"  class="form-control" id="natureOfWork" name="natureOfWork">
+                <div class="input-group">
+                <input type="text" maxlength="15"  class="form-control" id="natureOfWork" name="natureOfWork" title="Please enter your master">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+                    </div>
+                </div>
                 <input type="hidden" class="form-control" id="natureOfWork_id" name="natureOfWork_id">
             </div>
             <div class="form-group col-md-5 ml-auto" id="similarNatureRow">
@@ -570,14 +637,16 @@
             <label for="supportingDocs">Upload Supporting Documents:</label>
             <input type="file" class="form-control-file" id="supportingDocs" name="supportingDocs" multiple />
         </div>
-
-        <!-- Submit and Cancel buttons -->
-        <div class="row justify-content-center">
-            <button type="submit" class="btn btn-primary mr-2">Submit</button>
-            <button type="reset" class="btn btn-secondary">Cancel</button>
+        <div class="row d-flex ">
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button type="reset" class="btn btn-secondary" onclick="window.location.href='/Tenderlist'" >Cancel</button>
+            </div>
         </div>
+            </div>
     </form>
 </div>
+
 
 <!-- JavaScript to handle component visibility -->
 <script>
@@ -700,444 +769,179 @@
     }
 
 
-
-$(document).ready(function() {
-    $("#zone").autocomplete({
+ $("#zone").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/searchAllZone",
-                data: {
-                    query: request.term
-                },
+                data: { query: request.term },
                 success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
                 }
             });
         },
         minLength: 2,
         select: function(event, ui) {
-            // Set the value of the #caseTitle input field
             $("#zone").val(ui.item.label);
             $("#zone_id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
+            return false;
         }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>   Name   </th><th> ID </th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
-
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
-
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
+    });
 
 
 
-
-    <!--deprtment-->
-    $(document).ready(function() {
-    $("#department").autocomplete({
+  <!--deprtment-->
+ $("#department").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/searchAllDepartment",
-                data: {
-                    query: request.term
-                },
+                data: { query: request.term },
                 success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
                 }
             });
         },
         minLength: 2,
         select: function(event, ui) {
-            // Set the value of the #caseTitle input field
             $("#department").val(ui.item.label);
             $("#department_id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
+            return false;
         }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>   Name   </th><th> ID </th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
+    });
 
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
 
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
+
 
 
     <!--state-->
-    $(document).ready(function() {
     $("#state").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/searchAllstate",
-                data: {
-                    query: request.term
-                },
+                data: { query: request.term },
                 success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
                 }
             });
         },
         minLength: 2,
         select: function(event, ui) {
-            // Set the value of the #caseTitle input field
             $("#state").val(ui.item.label);
             $("#state_id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
+            return false;
         }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>   Name   </th><th> ID </th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
+    });
 
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
 
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
 
 <!--client-->
 
-
-
-
-    $(document).ready(function() {
-    $("#clientName").autocomplete({
+$("#clientName").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/searchAssupmstDetails",
-                data: {
-                    query: request.term
-                },
+                data: { query: request.term },
                 success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
                 }
             });
         },
         minLength: 2,
         select: function(event, ui) {
-            // Set the value of the #caseTitle input field
             $("#clientName").val(ui.item.label);
             $("#clientName_id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
+            return false;
         }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>   Name   </th><th> ID </th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
+    });
 
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
 
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
 
 
 
 
     <!--division-->
-
-
-
-
-
-    $(document).ready(function() {
-    $("#division").autocomplete({
+$("#division").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/searchDivisionData",
-                data: {
-                    query: request.term
-                },
+                data: { query: request.term },
                 success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
                 }
             });
         },
         minLength: 2,
         select: function(event, ui) {
-            // Set the value of the #caseTitle input field
             $("#division").val(ui.item.label);
             $("#division_id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
+            return false;
         }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>   Name   </th><th> ID </th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
-
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
-
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
-
+    });
 
 
     <!--operational branch-->
 
-
-
-        $(document).ready(function() {
-    $("#operationalBranch").autocomplete({
+$("#operationalBranch").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/searchBranchData",
-                data: {
-                    query: request.term
-                },
+                data: { query: request.term },
                 success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
                 }
             });
         },
         minLength: 2,
         select: function(event, ui) {
-            // Set the value of the #caseTitle input field
             $("#operationalBranch").val(ui.item.label);
             $("#operationalBranch_id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
+            return false;
         }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>   Name   </th><th> ID </th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
+    });
 
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
 
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
+
 
 
     <!--nature of work-->
 
-
-
-
-      $(document).ready(function() {
-    $("#natureOfWork").autocomplete({
+ $("#natureOfWork").autocomplete({
         source: function(request, response) {
             $.ajax({
                 url: "/searchNatureOfWork",
-                data: {
-                    query: request.term
-                },
+                data: { query: request.term },
                 success: function(data) {
-                    var suggestions = [];
-                    $.each(data, function(index, item) {
-                        suggestions.push({
-                            value: item.suplierId, // Displayed in the input field
-                            label: item.supplier, // Displayed in the dropdown
-                            assupmstId: item.assupmstId,
-                            assupmst: item.assupmst,
-
-                        });
-                    });
-                    response(suggestions);
+                    response(data.map(item => ({
+                        label: item.supplier,
+                        value: item.suplierId
+                    })));
                 }
             });
         },
         minLength: 2,
         select: function(event, ui) {
-            // Set the value of the #caseTitle input field
             $("#natureOfWork").val(ui.item.label);
-            $("#natureOfWork_id").val(ui.item.value);
-<!--            $("#department_id").val(ui.item.assupmstId);-->
-<!--            $("#department").val(ui.item.assupmst);-->
-<!--            $("#division_id").val(ui.item.value);-->
-<!--            $("#division").val(ui.item.address);-->
-<!--                    // Set the value of the hidden #caseId input field-->
-<!--                    $("#caseId").val(ui.item.caseId);-->
-<!--                    console.log("Selected: " + ui.item.value + " with ID " + ui.item.caseId);-->
-            return false; // Prevent default behavior of setting the value
+            $("#natureOfWork_Id").val(ui.item.value);
+            return false;
         }
-    }).data("ui-autocomplete")._renderMenu = function(ul, items) {
-        var $table = $('<table class="table table-hover mb-0"></table>');
-        var $header = $('<tr><th>   Name    </th><th>  ID  </th></tr>');
-        $table.append($header);
-        ul.append($table);
-        var self = this;
-        $.each(items, function(index, item) {
-            self._renderItemData(ul, item);
-        });
-    };
-
-    $.ui.autocomplete.prototype._renderItem = function(ul, item) {
-        var $row = $('<tr class="ui-menu-item"></tr>');
-        $row.append('<td>' + item.label + '</td>');
-        $row.append('<td>' + item.value + '</td>');
-
-        $row.data("ui-autocomplete-item", item);
-        return $row.appendTo(ul.find('table'));
-    };
-});
+    });
 
 
     function updateParticipatingMonth() {
