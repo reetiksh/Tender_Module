@@ -55,6 +55,10 @@ public interface TenderRepository extends JpaRepository<Tender, Long> {
     @Query(value= "update tender_detail SET proceed = 'N' WHERE  id=:query", nativeQuery = true)
     int tenderNotApprove(@Param("query") String query);
 
+    @Modifying
+    @Query(value= "update tender_detail SET status = :step WHERE  id=:id", nativeQuery = true)
+    int UpdateStep(@Param("id") String id,@Param("step") String step);
+
 
 
 

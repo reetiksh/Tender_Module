@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -21,9 +22,37 @@ public class FollowUpRemark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String remarkDate;
+    @Column(updatable = false)
+    private LocalDate  remarkDate;
     private String remark;
     private Long emdMonitoringId;
+
+    private String userId;
+
+
+
+    @PrePersist
+    protected void onCreate() {
+        remarkDate = LocalDate.now(); // Set the insert timestamp
+
+    }
+
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public LocalDate  getRemarkDate() {
+        return remarkDate;
+    }
+
+    public void setRemarkDate(LocalDate  remarkDate) {
+        this.remarkDate = remarkDate;
+    }
 
     public Long getId() {
         return id;
@@ -33,13 +62,6 @@ public class FollowUpRemark {
         this.id = id;
     }
 
-    public String getRemarkDate() {
-        return remarkDate;
-    }
-
-    public void setRemarkDate(String remarkDate) {
-        this.remarkDate = remarkDate;
-    }
 
     public String getRemark() {
         return remark;
@@ -57,8 +79,8 @@ public class FollowUpRemark {
         this.emdMonitoringId = emdMonitoringId;
     }
 
-    public FollowUpRemark(Long emdMonitoringId, String remark, String remarkDate) {
-        this.remarkDate = remarkDate;
+    public FollowUpRemark(Long emdMonitoringId, String remark) {
+
         this.remark = remark;
         this.emdMonitoringId = emdMonitoringId;
     }

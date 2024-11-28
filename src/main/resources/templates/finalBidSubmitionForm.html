@@ -10,10 +10,15 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
 </head>
-<body layout:fragment="content">
+<body layout:fragment="content" onload="steperror()">
 <div class="container">
   <h2 class="mt-5">Final Bid Submit</h2>
   <form action="#" th:action="@{/finalBidSubmitionSave}" method="post" th:object="${FinalBidSubmittion}" class="p-3" enctype="multipart/form-data" >
+
+    <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId"  ></div>
+    <input type="hidden" id="stepError" th:value="${stepError}">
+
+
     <div class="row mb-2"  th:object="${tender}" id="TechnicalApproveByrow" >
       <div class="col-md-3">
         <label for="TechnicalApproveBy">Technical Approve By</label>
@@ -107,7 +112,9 @@
 
     <div class="row justify-content-center">
       <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
-      <a href="#" class="btn btn-secondary h-auto w-auto ms-2" >Cancel</a>
+      <button type="reset" class="btn btn-secondary h-auto w-auto" th:data-url="${cancelUrl}"
+              onclick="navigateToUrl(this)" >Cancel</button>
+
 
     </div>
   </form>
@@ -115,61 +122,76 @@
 
 <script>
 
+  function steperror(){
+var error=$("#stepError").val();
+if(error!=""&&error!=null){
+alert(error);
 
-  function togglePaymentFields(that) {
-        const status = that.value;
+history.back();
+}
+}
 
-          if (status === '1') {
+function navigateToUrl(button) {
+        const url = button.getAttribute('data-url');
+        if (url) {
+            window.location.href = url;
+        }
+    }
 
-            document.getElementById('notParticipatedReasonrow').style.display = 'none';
-          } else if (status === '0' ) {
-            document.getElementById('notParticipatedReasonrow').style.display = 'flex';
-          }
+function togglePaymentFields(that) {
+    const status = that.value;
+
+      if (status === '1') {
+
+        document.getElementById('notParticipatedReasonrow').style.display = 'none';
+      } else if (status === '0' ) {
+        document.getElementById('notParticipatedReasonrow').style.display = 'flex';
       }
+  }
 
 
-  $("#TechnicalApproveBy").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchuserDetails",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#TechnicalApproveBy").val(ui.item.label);
-            $("#TechnicalApproveBy_Id").val(ui.item.value);
-            return false;
-        }
-    });
+$("#TechnicalApproveBy").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchuserDetails",
+            data: { query: request.term },
+            success: function(data) {
+                response(data.map(item => ({
+                    label: item.supplier,
+                    value: item.suplierId
+                })));
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        $("#TechnicalApproveBy").val(ui.item.label);
+        $("#TechnicalApproveBy_Id").val(ui.item.value);
+        return false;
+    }
+});
 
 
-  $("#FinancialApproveBy").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchuserDetails",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#FinancialApproveBy").val(ui.item.label);
-            $("#FinancialApproveBy_Id").val(ui.item.value);
-            return false;
-        }
-    });
+$("#FinancialApproveBy").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchuserDetails",
+            data: { query: request.term },
+            success: function(data) {
+                response(data.map(item => ({
+                    label: item.supplier,
+                    value: item.suplierId
+                })));
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        $("#FinancialApproveBy").val(ui.item.label);
+        $("#FinancialApproveBy_Id").val(ui.item.value);
+        return false;
+    }
+});
 
 </script>
 

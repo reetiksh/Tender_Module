@@ -10,11 +10,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.eryery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
-<body layout:fragment="content">
+<body layout:fragment="content" onload="getDaysFunction(),steperror()">
 <div class="container mt-5">
     <h2>EMD Monitoring Form</h2>
     <form th:action="@{/emd-monitoring}" th:object="${emdMonitoring}" method="post">
         <input type="hidden" th:field="${id}" />
+
+        <input type="hidden" id="stepError" th:value="${stepError}">
 
         <div class="row mb-2"  th:object="${tender}">
             <div class="col-md-3">
@@ -31,6 +33,13 @@
                 <input type="hidden" class="form-control" th:value="${bidEvaluation.id}"   required>
             </div>
         </div>
+
+        <div class="row mb-2"  th:object="${commonParameter}">
+
+        </div>
+
+        <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId" ></div>
+
 
         <!-- EMD Amount -->
         <div class="row mb-3">
@@ -82,7 +91,7 @@
                 <label class=" col-form-label">Bid Validity in Days</label>
             </div>
             <div class="col-md-3">
-                <input type="number" maxlength="30" name="bidValidityInDays" id="bidValidityInDays" class="form-control" readonly />
+                <input type="text" maxlength="30" name="bidValidityInDays" id="bidValidityInDays" class="form-control" readonly />
             </div>
         </div>
 
@@ -185,7 +194,7 @@
                 <label class=" col-form-label">Ageing</label>
             </div>
             <div class="col-md-3">
-                <input type="text" maxlength="30"  name="ageing" id="ageing"  class="form-control"  />
+                <input type="text" maxlength="30"  name="ageing" id="ageing"  class="form-control" readonly />
             </div>
         </div>
 
@@ -236,12 +245,11 @@
             </div>
             <div class="col-md-3">
                 <textarea  class="form-control" maxlength="250"  name="remark" id="remark" placeholder="Enter follow-up remarks here..."></textarea>
-            </div>
-            <div class="col-md-2 ml-3">
-                <label class=" col-form-label">Remark Date</label>
-            </div>
-            <div class="col-md-3">
-                <input type="date" onblur="isValidDateFormat(this.id)" name="remarkDate" id="remarkDate" class="form-control"  />
+                <input type="date" style="display:none" id="gdate" th:value="${commonParameter.g_Date}" class="form-control" readonly />
+                <input type="date" style="display:none" id="finalDate" th:value="${bidEvaluation.finalDate}" class="form-control" readonly />
+                <input type="date" style="display:none" id="bidValidity" th:value="${tender.bidValidity}" class="form-control" readonly />
+
+
             </div>
         </div>
 
@@ -250,7 +258,8 @@
         <div class="row">
             <div class="col text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-secondary" onclick="window.location.href='/emd-monitoringlist'" >Cancel</button>
+                <button type="reset" class="btn btn-secondary" th:data-url="${cancelUrl}"
+                        onclick="navigateToUrl(this)">Cancel</button>
             </div>
         </div>
     </form>
@@ -260,74 +269,127 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <!-- Your JavaScript -->
 <script >
-    function limitDigits(input, maxDigits) {
-      if (input.value.length > maxDigits) {
-        input.value = input.value.slice(0, maxDigits);
-      }
-    }
 
-    function toggleVia(that) {
-    const status = that.value;
-    const viaRow = document.getElementById('viarow');
+    function steperror(){
+var error=$("#stepError").val();
+if(error!=""&&error!=null){
+alert(error);
 
-    if (status === '1') {
-        viaRow.style.display = 'flex';
-    } else {
-        const viaInput = document.getElementById('via');
-        if (viaInput) {
-            viaInput.value = '';
-        }
-        viaRow.style.display = 'none';
-    }
+history.back();
 }
-     <!--operational branch-->
+}
+
+  function navigateToUrl(button) {
+        const url = button.getAttribute('data-url');
+        if (url) {
+            window.location.href = url;
+        }
+    }
+
+function limitDigits(input, maxDigits) {
+  if (input.value.length > maxDigits) {
+    input.value = input.value.slice(0, maxDigits);
+  }
+}
+
+function toggleVia(that) {
+const status = that.value;
+const viaRow = document.getElementById('viarow');
+
+if (status === '1') {
+    viaRow.style.display = 'flex';
+} else {
+    const viaInput = document.getElementById('via');
+    if (viaInput) {
+        viaInput.value = '';
+    }
+    viaRow.style.display = 'none';
+}
+}
+ <!--operational branch-->
 
 
 $("#operationalBranch").autocomplete({
-      source: function(request, response) {
-          $.ajax({
-              url: "/searchBranchData",
-              data: { query: request.term },
-              success: function(data) {
-                  response(data.map(item => ({
-                      label: item.supplier,
-                      value: item.suplierId
-                  })));
-              }
-          });
-      },
-      minLength: 2,
-      select: function(event, ui) {
-          $("#operationalBranch").val(ui.item.label);
-          $("#operationalBranch_id").val(ui.item.value);
-          return false;
-      }
-  });
+  source: function(request, response) {
+      $.ajax({
+          url: "/searchBranchData",
+          data: { query: request.term },
+          success: function(data) {
+              response(data.map(item => ({
+                  label: item.supplier,
+                  value: item.suplierId
+              })));
+          }
+      });
+  },
+  minLength: 2,
+  select: function(event, ui) {
+      $("#operationalBranch").val(ui.item.label);
+      $("#operationalBranch_id").val(ui.item.value);
+      return false;
+  }
+});
 
 
-       <!-- branch manager -->
+   <!-- branch manager -->
 
 
 $("#branchManager").autocomplete({
-      source: function(request, response) {
-          $.ajax({
-              url: "/searchuserDetails",
-              data: { query: request.term },
-              success: function(data) {
-                  response(data.map(item => ({
-                      label: item.supplier,
-                      value: item.suplierId
-                  })));
-              }
-          });
-      },
-      minLength: 2,
-      select: function(event, ui) {
-          $("#branchManager").val(ui.item.label);
-          $("#branchManager_id").val(ui.item.value);
-          return false;
-      }
-  });
+  source: function(request, response) {
+      $.ajax({
+          url: "/searchuserDetails",
+          data: { query: request.term },
+          success: function(data) {
+              response(data.map(item => ({
+                  label: item.supplier,
+                  value: item.suplierId
+              })));
+          }
+      });
+  },
+  minLength: 2,
+  select: function(event, ui) {
+      $("#branchManager").val(ui.item.label);
+      $("#branchManager_id").val(ui.item.value);
+      return false;
+  }
+});
+
+
+function getDaysFunction(){
+const bidValidity= $("#bidValidity").val();
+const finalDate= $("#finalDate").val();
+const gdate= $("#gdate").val();
+
+
+ const d1 = new Date(gdate);
+ const d2 = new Date(finalDate);
+ const d3 = new Date(bidValidity);
+
+// Calculate the difference in time (milliseconds)
+if(d1>d2){
+const diffInTime = Math.abs(d1 - d2);
+
+// Convert time difference to days
+const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+  $("#ageing").val(diffInDays);
+}
+else{
+$("#ageing").val("Invalid Final Date");
+}
+
+if(d3>d1){
+const diffInTimebid = Math.abs(d3 - d1);
+
+// Convert time difference to days
+const diffInDaysbid = Math.ceil(diffInTimebid / (1000 * 60 * 60 * 24));
+  $("#bidValidityInDays").val(diffInDaysbid);
+}
+else{
+$("#bidValidityInDays").val("Expired");}
+
+
+}
 
 
 </script>

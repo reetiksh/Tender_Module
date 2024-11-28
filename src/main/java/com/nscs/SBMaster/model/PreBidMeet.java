@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -29,6 +30,49 @@ public class PreBidMeet {
     private String assignTo_id;
     private String Reminder;
     private String Reminder_id;
+
+    private String userId;
+
+    @Column(name = "insert_date_time", updatable = false)
+    private LocalDateTime insertDateTime;
+
+    @Column(name = "update_date_time")
+    private LocalDateTime updateDateTime;
+
+    @PrePersist
+    protected void onCreate() {
+        insertDateTime = LocalDateTime.now(); // Set the insert timestamp
+        updateDateTime = insertDateTime; // Initially set update timestamp the same as insert
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDateTime = LocalDateTime.now(); // Set the update timestamp on updates
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public LocalDateTime getInsertDateTime() {
+        return insertDateTime;
+    }
+
+    public void setInsertDateTime(LocalDateTime insertDateTime) {
+        this.insertDateTime = insertDateTime;
+    }
+
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
 
     public Long getId() {
         return id;

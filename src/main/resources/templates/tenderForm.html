@@ -26,6 +26,16 @@
 <div class="container">
     <h2 class="mt-5">Enter Tender Details</h2>
     <form action="#" th:action="@{/saveTenderNew}" method="post" th:object="${user}" class="p-3" enctype="multipart/form-data">
+
+        <div>  <input type="hidden"  th:value="${user.userId}"  id="userId" name="userId"  ></div>
+
+
+        <div class="row mb-2"  th:object="${commonParameter}">
+            <div>
+                <input type="date" style="display:none" id="gdate" th:value="${commonParameter.g_Date}" class="form-control" readonly />
+            </div>
+
+        </div>
         <!-- Eligibility and Search Date -->
         <div class="form-row mb-3 ">
             <div class="form-group col-md-5" id="eligibilityRow" >
@@ -62,7 +72,7 @@
             </div>
             <div class="form-group col-md-5 ml-auto" id="extendedDateRow">
                 <label for="extendedDate">Extended Date:</label>
-                <input type="datetime-local" maxlength="15"  class="form-control" id="extendedDate" name="extendedDate">
+                <input type="date" maxlength="15"  class="form-control" id="extendedDate" name="extendedDate">
             </div>
         </div>
 
@@ -637,379 +647,422 @@
             <label for="supportingDocs">Upload Supporting Documents:</label>
             <input type="file" class="form-control-file" id="supportingDocs" name="supportingDocs" multiple />
         </div>
+
         <div class="row d-flex ">
             <div class="text-center">
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                <button type="reset" class="btn btn-secondary" onclick="window.location.href='/Tenderlist'" >Cancel</button>
+                <button type="reset" class="btn btn-secondary" th:data-url="${cancelUrl}"
+                        onclick="navigateToUrl(this)">Cancel</button>
             </div>
         </div>
-            </div>
+
     </form>
 </div>
 
 
 <!-- JavaScript to handle component visibility -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch('/api/component-visibility/entry')
-            .then(response => response.json())
-            .then(data => {
-                // data is an array of component objects
-                data.forEach(component => {
-                    const componentName = component.componentName;
-                    const isVisible = component.visible;
 
-                    // Assuming that each component row has an ID in the format componentName + 'Row'
-                    const element = document.getElementById(componentName + 'Row');
-                    if (element) {
-                        if (isVisible) {
-                            element.style.display = 'block'; // or 'block' depending on your layout
-                        } else {
-                            element.style.display = 'none';
-                        }
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching component visibility:', error));
-    });
+    function navigateToUrl(button) {
+         const url = button.getAttribute('data-url');
+         if (url) {
+             window.location.href = url;
+         }
+     }
 
-    function toggleExemted(that){
-          const status = that.value;
-          const componentid= that.id.split("ExemptedOfUs")[0];
-        const Exempted = document.getElementById(componentid+'ModeOFPaymentRow');
 
-        if (status === '1') {
-        Exempted.style.display = 'none';
-            }
-    else if(status === '0'){
-     Exempted.style.display = 'block';
-    }
+   document.addEventListener("DOMContentLoaded", function () {
+       fetch('/api/component-visibility/entry')
+           .then(response => response.json())
+           .then(data => {
+               // data is an array of component objects
+               data.forEach(component => {
+                   const componentName = component.componentName;
+                   const isVisible = component.visible;
+
+                   // Assuming that each component row has an ID in the format componentName + 'Row'
+                   const element = document.getElementById(componentName + 'Row');
+                   if (element) {
+                       if (isVisible) {
+                           element.style.display = 'block'; // or 'block' depending on your layout
+                       } else {
+                           element.style.display = 'none';
+                       }
+                   }
+               });
+           })
+           .catch(error => console.error('Error fetching component visibility:', error));
+   });
+
+   function toggleExemted(that){
+         const status = that.value;
+         const componentid= that.id.split("ExemptedOfUs")[0];
+       const Exempted = document.getElementById(componentid+'ModeOFPaymentRow');
+
+       if (status === '1') {
+       Exempted.style.display = 'none';
+           }
+   else if(status === '0'){
+    Exempted.style.display = 'block';
+   }
 
 
 }
 
-    // JavaScript functions to handle Mode of Payment field changes
-    function toggleTenderFeePaymentFields() {
-        const modeOfPayment = document.getElementById('tenderModeOFPayment').value;
+   // JavaScript functions to handle Mode of Payment field changes
+   function toggleTenderFeePaymentFields() {
+       const modeOfPayment = document.getElementById('tenderModeOFPayment').value;
 
-        // Get all the conditional fields
-        const fdrFields = document.getElementById('fdrFields');
-        const paymentGatewayField = document.getElementById('paymentGatewayField');
-        const rtgsFieldsAC = document.getElementById('tendertgsFieldsAC');
-        const rtgsFieldsIFSC = document.getElementById('tenderrtgsFieldsIFSC');
+       // Get all the conditional fields
+       const fdrFields = document.getElementById('fdrFields');
+       const paymentGatewayField = document.getElementById('paymentGatewayField');
+       const rtgsFieldsAC = document.getElementById('tendertgsFieldsAC');
+       const rtgsFieldsIFSC = document.getElementById('tenderrtgsFieldsIFSC');
 
-        // Hide all conditional fields
-        fdrFields.style.display = 'none';
-        paymentGatewayField.style.display = 'none';
-        rtgsFieldsAC.style.display = 'none';
-        rtgsFieldsIFSC.style.display = 'none';
+       // Hide all conditional fields
+       fdrFields.style.display = 'none';
+       paymentGatewayField.style.display = 'none';
+       rtgsFieldsAC.style.display = 'none';
+       rtgsFieldsIFSC.style.display = 'none';
 
-        // Show the appropriate fields based on the selected mode of payment
-        if (modeOfPayment === 'fdr') {
-            fdrFields.style.display = 'block';
-        } else if (modeOfPayment === 'paymentGateway') {
-            paymentGatewayField.style.display = 'block';
-        } else if (modeOfPayment === 'rtgs') {
-            rtgsFieldsAC.style.display = 'block';
-            rtgsFieldsIFSC.style.display = 'block';
-        }
-    }
+       // Show the appropriate fields based on the selected mode of payment
+       if (modeOfPayment === 'fdr') {
+           fdrFields.style.display = 'block';
+       } else if (modeOfPayment === 'paymentGateway') {
+           paymentGatewayField.style.display = 'block';
+       } else if (modeOfPayment === 'rtgs') {
+           rtgsFieldsAC.style.display = 'block';
+           rtgsFieldsIFSC.style.display = 'block';
+       }
+   }
 
-    function toggleProcessingFeePaymentFields() {
-        const modeOfPayment = document.getElementById('processingModeOFPayment').value;
+   function toggleProcessingFeePaymentFields() {
+       const modeOfPayment = document.getElementById('processingModeOFPayment').value;
 
-        // Get all the conditional fields
-        const fdrFields = document.getElementById('processingfdrFields');
-        const paymentGatewayField = document.getElementById('processingpaymentGatewayField');
-        const rtgsFieldsAC = document.getElementById('processingrtgsFieldsAC');
-        const rtgsFieldsIFSC = document.getElementById('processingrtgsFieldsIFSC');
+       // Get all the conditional fields
+       const fdrFields = document.getElementById('processingfdrFields');
+       const paymentGatewayField = document.getElementById('processingpaymentGatewayField');
+       const rtgsFieldsAC = document.getElementById('processingrtgsFieldsAC');
+       const rtgsFieldsIFSC = document.getElementById('processingrtgsFieldsIFSC');
 
-        // Hide all conditional fields
-        fdrFields.style.display = 'none';
-        paymentGatewayField.style.display = 'none';
-        rtgsFieldsAC.style.display = 'none';
-        rtgsFieldsIFSC.style.display = 'none';
+       // Hide all conditional fields
+       fdrFields.style.display = 'none';
+       paymentGatewayField.style.display = 'none';
+       rtgsFieldsAC.style.display = 'none';
+       rtgsFieldsIFSC.style.display = 'none';
 
-        // Show the appropriate fields based on the selected mode of payment
-        if (modeOfPayment === 'fdr') {
-            fdrFields.style.display = 'block';
-        } else if (modeOfPayment === 'paymentGateway') {
-            paymentGatewayField.style.display = 'block';
-        } else if (modeOfPayment === 'rtgs') {
-            rtgsFieldsAC.style.display = 'block';
-            rtgsFieldsIFSC.style.display = 'block';
-        }
-    }
+       // Show the appropriate fields based on the selected mode of payment
+       if (modeOfPayment === 'fdr') {
+           fdrFields.style.display = 'block';
+       } else if (modeOfPayment === 'paymentGateway') {
+           paymentGatewayField.style.display = 'block';
+       } else if (modeOfPayment === 'rtgs') {
+           rtgsFieldsAC.style.display = 'block';
+           rtgsFieldsIFSC.style.display = 'block';
+       }
+   }
 
-    function toggleEmdPaymentFields() {
-    debugger;
-        const modeOfPayment = document.getElementById('emdModeOFPayment').value;
+   function toggleEmdPaymentFields() {
+   debugger;
+       const modeOfPayment = document.getElementById('emdModeOFPayment').value;
 
-        // Get all the conditional fields
-        const fdrFields = document.getElementById('EmdfdrFields');
-        const paymentGatewayField = document.getElementById('EMDpaymentGatewayField');
-        const rtgsFieldsAC = document.getElementById('EMDtgsFieldsAC');
-        const rtgsFieldsIFSC = document.getElementById('EMDrtgsFieldsIFSC');
+       // Get all the conditional fields
+       const fdrFields = document.getElementById('EmdfdrFields');
+       const paymentGatewayField = document.getElementById('EMDpaymentGatewayField');
+       const rtgsFieldsAC = document.getElementById('EMDtgsFieldsAC');
+       const rtgsFieldsIFSC = document.getElementById('EMDrtgsFieldsIFSC');
 
-        // Hide all conditional fields
-        fdrFields.style.display = 'none';
-        paymentGatewayField.style.display = 'none';
-        rtgsFieldsAC.style.display = 'none';
-        rtgsFieldsIFSC.style.display = 'none';
+       // Hide all conditional fields
+       fdrFields.style.display = 'none';
+       paymentGatewayField.style.display = 'none';
+       rtgsFieldsAC.style.display = 'none';
+       rtgsFieldsIFSC.style.display = 'none';
 
-        // Show the appropriate fields based on the selected mode of payment
-        if (modeOfPayment === 'fdr') {
-            fdrFields.style.display = 'block';
-        } else if (modeOfPayment === 'paymentGateway') {
-            paymentGatewayField.style.display = 'block';
-        } else if (modeOfPayment === 'rtgs') {
-            rtgsFieldsAC.style.display = 'block';
-            rtgsFieldsIFSC.style.display = 'block';
-        }
-    }
-
-
- $("#zone").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchAllZone",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#zone").val(ui.item.label);
-            $("#zone_id").val(ui.item.value);
-            return false;
-        }
-    });
+       // Show the appropriate fields based on the selected mode of payment
+       if (modeOfPayment === 'fdr') {
+           fdrFields.style.display = 'block';
+       } else if (modeOfPayment === 'paymentGateway') {
+           paymentGatewayField.style.display = 'block';
+       } else if (modeOfPayment === 'rtgs') {
+           rtgsFieldsAC.style.display = 'block';
+           rtgsFieldsIFSC.style.display = 'block';
+       }
+   }
 
 
-
-  <!--deprtment-->
- $("#department").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchAllDepartment",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#department").val(ui.item.label);
-            $("#department_id").val(ui.item.value);
-            return false;
-        }
-    });
+$("#zone").autocomplete({
+       source: function(request, response) {
+           $.ajax({
+               url: "/searchAllZone",
+               data: { query: request.term },
+               success: function(data) {
+                   response(data.map(item => ({
+                       label: item.supplier,
+                       value: item.suplierId
+                   })));
+               }
+           });
+       },
+       minLength: 2,
+       select: function(event, ui) {
+           $("#zone").val(ui.item.label);
+           $("#zone_id").val(ui.item.value);
+           return false;
+       }
+   });
 
 
 
+ <!--deprtment-->
+$("#department").autocomplete({
+       source: function(request, response) {
+           $.ajax({
+               url: "/searchAllDepartment",
+               data: { query: request.term },
+               success: function(data) {
+                   response(data.map(item => ({
+                       label: item.supplier,
+                       value: item.suplierId
+                   })));
+               }
+           });
+       },
+       minLength: 2,
+       select: function(event, ui) {
+           $("#department").val(ui.item.label);
+           $("#department_id").val(ui.item.value);
+           return false;
+       }
+   });
 
 
-    <!--state-->
-    $("#state").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchAllstate",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#state").val(ui.item.label);
-            $("#state_id").val(ui.item.value);
-            return false;
-        }
-    });
+
+
+
+   <!--state-->
+   $("#state").autocomplete({
+       source: function(request, response) {
+           $.ajax({
+               url: "/searchAllstate",
+               data: { query: request.term },
+               success: function(data) {
+                   response(data.map(item => ({
+                       label: item.supplier,
+                       value: item.suplierId
+                   })));
+               }
+           });
+       },
+       minLength: 2,
+       select: function(event, ui) {
+           $("#state").val(ui.item.label);
+           $("#state_id").val(ui.item.value);
+           return false;
+       }
+   });
 
 
 
 <!--client-->
 
 $("#clientName").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchAssupmstDetails",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#clientName").val(ui.item.label);
-            $("#clientName_id").val(ui.item.value);
-            return false;
-        }
-    });
+       source: function(request, response) {
+           $.ajax({
+               url: "/searchAssupmstDetails",
+               data: { query: request.term },
+               success: function(data) {
+                   response(data.map(item => ({
+                       label: item.supplier,
+                       value: item.suplierId
+                   })));
+               }
+           });
+       },
+       minLength: 2,
+       select: function(event, ui) {
+           $("#clientName").val(ui.item.label);
+           $("#clientName_id").val(ui.item.value);
+           return false;
+       }
+   });
 
 
 
 
 
 
-    <!--division-->
+   <!--division-->
 $("#division").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchDivisionData",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#division").val(ui.item.label);
-            $("#division_id").val(ui.item.value);
-            return false;
-        }
-    });
+       source: function(request, response) {
+           $.ajax({
+               url: "/searchDivisionData",
+               data: { query: request.term },
+               success: function(data) {
+                   response(data.map(item => ({
+                       label: item.supplier,
+                       value: item.suplierId
+                   })));
+               }
+           });
+       },
+       minLength: 2,
+       select: function(event, ui) {
+           $("#division").val(ui.item.label);
+           $("#division_id").val(ui.item.value);
+           return false;
+       }
+   });
 
 
-    <!--operational branch-->
+   <!--operational branch-->
 
 $("#operationalBranch").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchBranchData",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#operationalBranch").val(ui.item.label);
-            $("#operationalBranch_id").val(ui.item.value);
-            return false;
-        }
-    });
+       source: function(request, response) {
+           $.ajax({
+               url: "/searchBranchData",
+               data: { query: request.term },
+               success: function(data) {
+                   response(data.map(item => ({
+                       label: item.supplier,
+                       value: item.suplierId
+                   })));
+               }
+           });
+       },
+       minLength: 2,
+       select: function(event, ui) {
+           $("#operationalBranch").val(ui.item.label);
+           $("#operationalBranch_id").val(ui.item.value);
+           return false;
+       }
+   });
 
 
 
 
 
-    <!--nature of work-->
+   <!--nature of work-->
 
- $("#natureOfWork").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchNatureOfWork",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#natureOfWork").val(ui.item.label);
-            $("#natureOfWork_Id").val(ui.item.value);
-            return false;
-        }
-    });
+$("#natureOfWork").autocomplete({
+       source: function(request, response) {
+           $.ajax({
+               url: "/searchNatureOfWork",
+               data: { query: request.term },
+               success: function(data) {
+                   response(data.map(item => ({
+                       label: item.supplier,
+                       value: item.suplierId
+                   })));
+               }
+           });
+       },
+       minLength: 2,
+       select: function(event, ui) {
+           $("#natureOfWork").val(ui.item.label);
+           $("#natureOfWork_Id").val(ui.item.value);
+           return false;
+       }
+   });
 
 
-    function updateParticipatingMonth() {
-        const submissionDate = document.getElementById('submissionDateAndTime').value;
-        const participatingMonthSelect = document.getElementById('participatingMonth');
+   function updateParticipatingMonth() {
+       const submissionDate = document.getElementById('submissionDate').value;
+       const participatingMonthSelect = document.getElementById('participatingMonth');
 
-        if (submissionDate) {
-            // Extract the month from the submission date
-            const date = new Date(submissionDate);
-            const month = date.toLocaleString('default', { month: 'long' });
+       if (submissionDate) {
+           // Extract the month from the submission date
+           const date = new Date(submissionDate);
+           const month = date.toLocaleString('default', { month: 'long' });
 
-            // Set the participating month based on the extracted month
-            for (let i = 0; i < participatingMonthSelect.options.length; i++) {
-                if (participatingMonthSelect.options[i].text === month) {
-                    participatingMonthSelect.selectedIndex = i;
-                    break;
-                }
-            }
-        } else {
-            participatingMonthSelect.selectedIndex = 0; // Default to "Select Month"
-        }
-    }
+           // Set the participating month based on the extracted month
+           for (let i = 0; i < participatingMonthSelect.options.length; i++) {
+               if (participatingMonthSelect.options[i].text === month) {
+                   participatingMonthSelect.selectedIndex = i;
+                   break;
+               }
+           }
+       } else {
+           participatingMonthSelect.selectedIndex = 0; // Default to "Select Month"
+       }
+   }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        // Attach event listeners for date validation
-        document.getElementById("submissionDateAndTime").addEventListener("change", validateDates);
-        document.getElementById("bidPublishDate").addEventListener("change", validateDates);
-        document.getElementById("extendedDateAndTime").addEventListener("change", validateDates);
-        document.getElementById("searchDate").addEventListener("change", validateDates);
+   document.addEventListener("DOMContentLoaded", function () {
+       // Attach event listeners for date validation
+       document.getElementById("submissionDate").addEventListener("change", validateDates);
+       document.getElementById("bidPublishDate").addEventListener("change", validateDates);
+       document.getElementById("extendedDate").addEventListener("change", validateDates);
+       document.getElementById("searchDate").addEventListener("change", validateDates);
+        document.getElementById("bidValidity").addEventListener("change", validateDates);
 
-        // Form submission validation
-        document.querySelector("form").onsubmit = function(event) {
-            if (!validateDates()) {
-                event.preventDefault();
-            }
-        };
-    });
 
-    function validateDates() {
-        const bidPublishDate = new Date(document.getElementById("bidPublishDate").value);
-        const submissionDate = new Date(document.getElementById("submissionDateAndTime").value);
-        const extendedDate = new Date(document.getElementById("extendedDateAndTime").value);
-        const searchDate = new Date(document.getElementById("searchDate").value);
-        let isValid = true;
-        let errorMessage = "";
+       // Form submission validation
+       document.querySelector("form").onsubmit = function(event) {
+           if (!validateDates()) {
+               event.preventDefault();
+           }
+       };
+   });
 
-        // Check if Bid Publish Date is less than Submission Date
-        if (bidPublishDate >= submissionDate) {
-            errorMessage += "Bid Publish Date should be earlier than Submission Date.\n";
-            isValid = false;
-        }
+   function validateDates() {
+       const bidPublishDate = new Date(document.getElementById("bidPublishDate").value);
+       const submissionDate = new Date(document.getElementById("submissionDate").value);
+       const extendedDate = new Date(document.getElementById("extendedDate").value);
+       const searchDate = new Date(document.getElementById("searchDate").value);
+       const bidValidityDate = new Date(document.getElementById("bidValidity").value);
+        const gDate = new Date(document.getElementById("gdate").value);
 
-        // Check if Extended Date is greater than Submission Date
-        if (extendedDate <= submissionDate) {
-            errorMessage += "Extended Date should be later than Submission Date.\n";
-            isValid = false;
-        }
-        // Check if Bid Publish Date is greater than Search Date
-         if (bidPublishDate >= searchDate) {
-            errorMessage += "Search Date should be later than Bid Publish Date.\n";
-            isValid = false;
-        }
-        if (!isValid) {
-            alert(errorMessage); // Display the error message
-        }
+       let isValid = true;
+       let errorMessage = "";
 
-        return isValid;
-    }
+       // Check if Bid Publish Date is less than Submission Date
+       if (bidPublishDate >= submissionDate) {
+           errorMessage += "Bid Publish Date should be earlier than Submission Date.\n";
+           isValid = false;
+       }
+
+       // Check if Extended Date is greater than Submission Date
+       if (extendedDate <= submissionDate) {
+           errorMessage += "Extended Date should be later than Submission Date.\n";
+           isValid = false;
+       }
+       // Check if Bid Publish Date is greater than Search Date
+        if (bidPublishDate >= searchDate) {
+           errorMessage += "Search Date should be later than Bid Publish Date.\n";
+           isValid = false;
+       }
+       // Check if Bid Validity Date is greater than Submission Date and Extended Date
+   if (bidValidityDate <= submissionDate) {
+       errorMessage += "Bid Validity Date should be later than Submission Date.\n";
+       isValid = false;
+   }
+   if (extendedDate && bidValidityDate <= extendedDate) {
+       errorMessage += "Bid Validity Date should be later than Extended Date.\n";
+       isValid = false;
+   }
+
+       // **New Checks for G Date**
+
+   // Check if Submission Date is greater than G Date
+   if (submissionDate > gDate) {
+       errorMessage += "Submission Date should not be later than current Date.\n";
+       isValid = false;
+   }
+
+   // Check if Extended Date is greater than G Date
+   if (extendedDate && extendedDate > gDate) {
+       errorMessage += "Extended Date should not be later than current Date.\n";
+       isValid = false;
+   }
+
+       if (!isValid) {
+           alert(errorMessage); // Display the error message
+       }
+       return isValid;
+   }
+
+
+
+
 </script>
 
 <!-- Bootstrap JS and dependencies -->

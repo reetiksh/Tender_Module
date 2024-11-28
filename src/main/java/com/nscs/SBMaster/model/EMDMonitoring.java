@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class EMDMonitoring {
     private String instrumentNo;
     private String date;
     private String emdValidity;
-    private Integer bidValidityInDays;
+    private String bidValidityInDays;
     private String tenderStatus;
     private String tenderStatusDate;
 
@@ -49,6 +50,49 @@ public class EMDMonitoring {
     private String concernAuthorityDesignation;
     private String concernAuthorityContactNo;
     private String concernAuthorityEmail;
+
+    private String userId;
+
+    @Column(name = "insert_date_time", updatable = false)
+    private LocalDateTime insertDateTime;
+
+    @Column(name = "update_date_time")
+    private LocalDateTime updateDateTime;
+
+    @PrePersist
+    protected void onCreate() {
+        insertDateTime = LocalDateTime.now(); // Set the insert timestamp
+        updateDateTime = insertDateTime; // Initially set update timestamp the same as insert
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDateTime = LocalDateTime.now(); // Set the update timestamp on updates
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public LocalDateTime getInsertDateTime() {
+        return insertDateTime;
+    }
+
+    public void setInsertDateTime(LocalDateTime insertDateTime) {
+        this.insertDateTime = insertDateTime;
+    }
+
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
 
     // One-to-Many relationship for follow-up remarks
     @OneToMany(mappedBy = "emdMonitoringId", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -110,11 +154,11 @@ public class EMDMonitoring {
         this.emdValidity = emdValidity;
     }
 
-    public Integer getBidValidityInDays() {
+    public String getBidValidityInDays() {
         return bidValidityInDays;
     }
 
-    public void setBidValidityInDays(Integer bidValidityInDays) {
+    public void setBidValidityInDays(String bidValidityInDays) {
         this.bidValidityInDays = bidValidityInDays;
     }
 
@@ -283,6 +327,8 @@ public class EMDMonitoring {
         this.concernAuthorityEmail = source.getConcernAuthorityEmail();
         this.operationalBranch_Id=source.getOperationalBranch_Id();
         this.branchManager_Id= source.getOperationalBranch_Id();
+        this.userId = source.getUserId();
+
     }
 
 

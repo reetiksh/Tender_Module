@@ -14,11 +14,11 @@ public class FollowUpRemarkService {
     @Autowired
     private FollowUpRemarkRepository followUpRemarkRepository;
 
-    public void saveData(Long id, List<String> remark, List<String> remarkDate){
+    public void saveData(Long id, List<String> remark){
 
 
         for(int i=0;i<remark.size();i++){
-            FollowUpRemark followUpRemark= new FollowUpRemark(id,remark.get(i),remarkDate.get(i));
+            FollowUpRemark followUpRemark= new FollowUpRemark(id,remark.get(i));
             followUpRemarkRepository.save(followUpRemark);
         }
     }

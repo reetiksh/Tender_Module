@@ -6,7 +6,7 @@
 <head>
 
   <meta charset="UTF-8">
-  <title>Pre Bid Meet List</title>
+  <title>Survey List</title>
   <!-- No Bootstrap -->
 
 
@@ -66,8 +66,10 @@
           <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.status}"></td>-->
           <!--                    <td style="padding: 10px; border: 1px solid #ccc;" th:text="${emp.Description}"></td>-->
           <td style="padding: 10px; border: 1px solid #ccc;">
-            <a th:href="@{'/PreBidEntry/' + ${emp.id}}" style="text-decoration: none; color: #007bff; margin-right: 10px;"><button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #007bff;">Pre Bid Meet List</button></a>
+            <a th:href="@{'/surveyApproval/' + ${emp.id}}" style="text-decoration: none; color: #007bff; margin-right: 10px;"><button type="submit" style="background-color: transparent; border: none; cursor: pointer; color: #007bff;">survey Approval</button></a>
+
           </td>
+
         </tr>
         </tbody>
       </table>
@@ -77,7 +79,7 @@
       <button type="reset" class="btn btn-secondary h-auto w-auto" th:data-url="${cancelUrl}"
               onclick="navigateToUrl(this)">Cancel</button>
     </div>
-    </div>
+  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="assets/js/jquery-3.7.1.min.js"></script>
@@ -90,8 +92,8 @@
 <!-- Datetimepicker JS -->
 <script src="assets/js/moment.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
-<script>
 
+<script>
   function navigateToUrl(button) {
           const url = button.getAttribute('data-url');
           if (url) {

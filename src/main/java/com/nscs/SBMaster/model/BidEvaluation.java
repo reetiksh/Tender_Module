@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,26 @@ public class BidEvaluation {
     private String financialDate;
     private String awardedDate;
     private String finalDate;
+
+    //
+    private String userId;
+
+    @Column(name = "insert_date_time", updatable = false)
+    private LocalDateTime insertDateTime;
+
+    @Column(name = "update_date_time")
+    private LocalDateTime updateDateTime;
+
+    @PrePersist
+    protected void onCreate() {
+        insertDateTime = LocalDateTime.now(); // Set the insert timestamp
+        updateDateTime = insertDateTime; // Initially set update timestamp the same as insert
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDateTime = LocalDateTime.now(); // Set the update timestamp on updates
+    }
 
     @OneToMany(mappedBy = "bidEvaluation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BidEvaluationParticipantsDetails> participantsDetails = new ArrayList<>();
@@ -219,6 +240,31 @@ public class BidEvaluation {
     }
     public BidEvaluation() {
     }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public LocalDateTime getInsertDateTime() {
+        return insertDateTime;
+    }
+
+    public void setInsertDateTime(LocalDateTime insertDateTime) {
+        this.insertDateTime = insertDateTime;
+    }
+
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
+
     public void updateFrom(BidEvaluation source) {
         if (source == null) {
             return;
@@ -242,6 +288,7 @@ public class BidEvaluation {
         this.financialDate = source.getFinancialDate();
         this.awardedDate = source.getAwardedDate();
         this.finalDate = source.getFinalDate();
+        this.userId = source.getUserId();
 
 
     }

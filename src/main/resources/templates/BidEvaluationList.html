@@ -74,7 +74,9 @@
     </div>
     <!-- Add Tender Button -->
     <div class="text-center mt-4">
-      <a th:href="@{'/TenderEntry'}" class="btn btn-success"><i class="fas fa-plus-circle"></i> Add New Tender</a>
+      <button type="reset" class="btn btn-secondary h-auto w-auto" th:data-url="${cancelUrl}"
+              onclick="navigateToUrl(this)">Cancel</button>
+
     </div> </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -88,5 +90,13 @@
 <!-- Datetimepicker JS -->
 <script src="assets/js/moment.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+  function navigateToUrl(button) {
+          const url = button.getAttribute('data-url');
+          if (url) {
+              window.location.href = url;
+          }
+      }
+</script>
 </body>
 </html>

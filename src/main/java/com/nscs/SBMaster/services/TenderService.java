@@ -227,4 +227,10 @@ public class TenderService {
 
         return caseDetailsList;
     }
+
+
+    @Transactional
+    public void updateStep(String id,String Step){
+        tenderRepository.UpdateStep(id,Step);
+    }
 }

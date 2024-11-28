@@ -9,7 +9,7 @@
 
 
 </head>
-<body layout:fragment="content">
+<body onload="checkFeeZero(),steperror()" layout:fragment="content" >
 <div class="container">
     <h2 class="mt-5">Fee Approval Details</h2>
     <form action="#" th:action="@{/FeeApprovalSave}" method="post" th:object="${feeApproval}" class="p-3" enctype="multipart/form-data" onsubmit="return validateForm()">
@@ -22,9 +22,12 @@
                 <input type="number" class="form-control" readonly th:value="${feeApproval != null ? feeApproval.TenderFee : tender.tenderAmount}"  id="TenderFee" name="TenderFee" required maxlength="18">
             </div>
         </div>
+        <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId"  ></div>
+        <input type="hidden" id="stepError" th:value="${stepError}">
 
 
-        <div class="row mb-2">
+
+        <div class="row mb-2" id="tenderfeestatusRow">
             <div class="col-md-3">
                 <label for="TenderFeestatus">Tender Fee status:</label>
             </div>
@@ -115,7 +118,7 @@
             </div>
         </div>
 
-        <div class="row mb-2">
+        <div class="row mb-2" id="processingfeestatusRow">
             <div class="col-md-3">
                 <label for="ProcessingFeestatus">Processing Fee status:</label>
             </div>
@@ -209,7 +212,7 @@
                 <input type="number" class="form-control"  th:value="${feeApproval != null ? feeApproval.EMDFeePending : 0}"  id="EMDFeePending" name="EMDFeePending" required maxlength="15" >
             </div>
         </div>
-        <div class="row mb-2">
+        <div class="row mb-2" id="emdfeestatusRow">
             <div class="col-md-3">
                 <label for="EMDFeestatus" >EMD Fee status:</label>
             </div>
@@ -289,7 +292,8 @@
         <div class="row d-flex">
             <div class="text-center">
             <button type="submit" class="btn btn-primary ">Submit</button>
-            <button type="reset" class="btn btn-secondary" onclick="window.location.href='/FeeApprovallist'" >Cancel</button>
+            <button type="reset" class="btn btn-secondary" th:data-url="${cancelUrl}"
+                    onclick="navigateToUrl(this)" >Cancel</button>
             </div>
         </div>
 
@@ -309,87 +313,125 @@
 <script src="/assets/js/bootstrap-datetimepicker.min.js"></script>
 <script>
 
+    function steperror(){
+var error=$("#stepError").val();
+if(error!=""&&error!=null){
+alert(error);
 
-    function togglePaymentFields(that) {
-          const status = that.value;
-          const componentid= that.id.split("Fee")[0];
-          const validityAtRow = document.getElementById(componentid+'feevalidityrow');
-          const dateRow = document.getElementById(componentid+'feedaterow');
-          const instumentRow = document.getElementById(componentid+'feeinstumentrow');
-          const reciveDateRow = document.getElementById(componentid+'feereceivedaterow');
-          const modeofpaymentRow = document.getElementById(componentid+'feemodeofpaymentrow');
+history.back();
+}
+}
 
-
-          if (status === '1') {
-              validityAtRow.style.display = 'flex';
-              dateRow.style.display = 'flex';
-              instumentRow.style.display = 'flex';
-              reciveDateRow.style.display = 'flex';
-              modeofpaymentRow.style.display = 'flex';
-
-          }
-          else{
-          document.getElementById(componentid+'FeeValidity').value='';
-          document.getElementById(componentid+'FeeInstument').value='';
-          document.getElementById(componentid+'FeeDate').value='';
-          document.getElementById(componentid+'FeeReceiveDate').value='';
-
-              validityAtRow.style.display = 'none';
-              dateRow.style.display = 'none';
-              instumentRow.style.display = 'none';
-              reciveDateRow.style.display = 'none';
-              modeofpaymentRow.style.display = 'none';
-          }
+  function navigateToUrl(button) {
+        const url = button.getAttribute('data-url');
+        if (url) {
+            window.location.href = url;
+        }
     }
 
+function togglePaymentFields(that) {
+      const status = that.value;
+      const componentid= that.id.split("Fee")[0];
+      const validityAtRow = document.getElementById(componentid+'feevalidityrow');
+      const dateRow = document.getElementById(componentid+'feedaterow');
+      const instumentRow = document.getElementById(componentid+'feeinstumentrow');
+      const reciveDateRow = document.getElementById(componentid+'feereceivedaterow');
+      const modeofpaymentRow = document.getElementById(componentid+'feemodeofpaymentrow');
 
 
-    function validateForm() {
-        const tenderFee = document.getElementById('TenderFee').value;
-        const emdFee = document.getElementById('EMDFee').value;
-        const emdFeePending = document.getElementById('EMDFeePending').value;
-        const processingFee = document.getElementById('ProcessingFee').value;
+      if (status === '1') {
+          validityAtRow.style.display = 'flex';
+          dateRow.style.display = 'flex';
+          instumentRow.style.display = 'flex';
+          reciveDateRow.style.display = 'flex';
+          modeofpaymentRow.style.display = 'flex';
 
-        // Regular expression to match the required pattern
-        const regex = /^\d{1,18}(\.\d{1,2})?$/;
-        // Validate each fee input
-        const fees = [
-            { name: 'Tender Fee', value: tenderFee },
-            { name: 'EMD Fee', value: emdFee },
-            { name: 'Pending EMD', value: emdFeePending },
-            { name: 'Processing Fee', value: processingFee },
-        ];
+      }
+      else{
+      document.getElementById(componentid+'FeeValidity').value='';
+      document.getElementById(componentid+'FeeInstument').value='';
+      document.getElementById(componentid+'FeeDate').value='';
+      document.getElementById(componentid+'FeeReceiveDate').value='';
 
-        for (const fee of fees) {
-            if (!regex.test(fee.value)) {
-                alert(`Invalid ${fee.name}. Please enter a number with up to 2 digits before and after the decimal point.`);
-                return false; // Prevent form submission
-            }
+          validityAtRow.style.display = 'none';
+          dateRow.style.display = 'none';
+          instumentRow.style.display = 'none';
+          reciveDateRow.style.display = 'none';
+          modeofpaymentRow.style.display = 'none';
+      }
+}
+
+
+
+function validateForm() {
+    const tenderFee = document.getElementById('TenderFee').value;
+    const emdFee = document.getElementById('EMDFee').value;
+    const emdFeePending = document.getElementById('EMDFeePending').value;
+    const processingFee = document.getElementById('ProcessingFee').value;
+
+    // Regular expression to match the required pattern
+    const regex = /^\d{1,18}(\.\d{1,2})?$/;
+    // Validate each fee input
+    const fees = [
+        { name: 'Tender Fee', value: tenderFee },
+        { name: 'EMD Fee', value: emdFee },
+        { name: 'Pending EMD', value: emdFeePending },
+        { name: 'Processing Fee', value: processingFee },
+    ];
+
+    for (const fee of fees) {
+        if (!regex.test(fee.value)) {
+            alert(`Invalid ${fee.name}. Please enter a number with up to 2 digits before and after the decimal point.`);
+            return false; // Prevent form submission
         }
-
-        return true; // Allow form submission
     }
 
-     document.addEventListener("DOMContentLoaded", function() {
-        // Get the tenderFeeStatus select element
-        var tenderFeeStatusSelect = document.getElementById("TenderFeestatus");
-        // Check if it has a value
-        if (tenderFeeStatusSelect.value !== "") {
-            // Call the togglePaymentFields function
-            togglePaymentFields(tenderFeeStatusSelect);
-        }
-          // Get the ProcessingFeestatus select element
-        var processingFeeStatusSelect = document.getElementById("ProcessingFeestatus");
-        if (processingFeeStatusSelect.value !== "") {
-            togglePaymentFields(processingFeeStatusSelect);
-        }
+    return true; // Allow form submission
+}
 
-         // Get the EMDFeestatus select element
-        var emdFeeStatusSelect = document.getElementById("EMDFeestatus");
-        if (emdFeeStatusSelect.value !== "") {
-            togglePaymentFields(emdFeeStatusSelect);
-        }
-    });
+ document.addEventListener("DOMContentLoaded", function() {
+    // Get the tenderFeeStatus select element
+    var tenderFeeStatusSelect = document.getElementById("TenderFeestatus");
+    // Check if it has a value
+    if (tenderFeeStatusSelect.value !== "") {
+        // Call the togglePaymentFields function
+        togglePaymentFields(tenderFeeStatusSelect);
+    }
+      // Get the ProcessingFeestatus select element
+    var processingFeeStatusSelect = document.getElementById("ProcessingFeestatus");
+    if (processingFeeStatusSelect.value !== "") {
+        togglePaymentFields(processingFeeStatusSelect);
+    }
+
+     // Get the EMDFeestatus select element
+    var emdFeeStatusSelect = document.getElementById("EMDFeestatus");
+    if (emdFeeStatusSelect.value !== "") {
+        togglePaymentFields(emdFeeStatusSelect);
+    }
+});
+
+  function checkFeeZero(){
+     var Tenderfee= document.getElementById('TenderFee').value;
+      var ProcessingFee= document.getElementById('ProcessingFee').value;
+       var EMDFee= document.getElementById('EMDFee').value;
+       const tenderfeestatus = document.getElementById('tenderfeestatusRow');
+       const emdfeestatus = document.getElementById('emdfeestatusRow');
+       const processingfeestatus = document.getElementById('processingfeestatusRow');
+
+       if(Tenderfee==null||Tenderfee=="0"||Tenderfee==""){
+
+           tenderfeestatus.style.display = 'none';
+       }
+        if(EMDFee==null||EMDFee=="0"||EMDFee==""){
+
+           emdfeestatus.style.display = 'none';
+       }
+        if(ProcessingFee==null||ProcessingFee=="0"||ProcessingFee==""){
+
+           processingfeestatus.style.display = 'none';
+       }
+
+  }
 </script>
 </body>
 </html>

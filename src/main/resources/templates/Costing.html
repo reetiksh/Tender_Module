@@ -43,6 +43,9 @@
       </div>
     </div>
 
+    <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId"  ></div>
+
+
     <div class="row mb-3">
       <div class="col-md-2">
       <label for="asPerSurvey">As per Survey </label>
@@ -94,7 +97,8 @@
     <!-- Submit and Cancel Buttons -->
     <div class="row justify-content-center mt-4">
       <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
-      <button type="reset" class="btn btn-secondary h-auto w-auto" onclick="window.location.href='/costinglist'">Cancel</button>
+      <button type="reset" class="btn btn-secondary h-auto w-auto" th:data-url="${cancelUrl}"
+              onclick="navigateToUrl(this)">Cancel</button>
     </div>
   </form>
 </div>
@@ -115,6 +119,13 @@
        input.value = input.value.slice(0, maxDigits);
      }
    }
+
+    function navigateToUrl(button) {
+            const url = button.getAttribute('data-url');
+            if (url) {
+                window.location.href = url;
+            }
+        }
 </script>
 </body>
 </html>

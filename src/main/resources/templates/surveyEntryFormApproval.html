@@ -32,10 +32,16 @@
   <!-- Datetimepicker CSS -->
   <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
 </head>
-<body layout:fragment="content">
+<body layout:fragment="content"  onload="steperror()">
 <div class="container mt-5">
   <h2>Survey Form</h2>
   <form th:action="@{/surveySave}" th:object="${Survey}" method="post">
+
+    <input type="hidden" name="actionType" value="approval">
+
+    <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId"  ></div>
+    <input type="hidden" id="stepError" th:value="${stepError}">
+
 
     <div class="row mb-2"  th:object="${tender}">
       <div class="col-md-3">
@@ -150,7 +156,8 @@
     <!-- Submit and Cancel Buttons -->
     <div class="row justify-content-center mt-4">
       <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
-      <button type="reset" class="btn btn-secondary h-auto w-auto" onclick="window.location.href='/Surveylist'">Cancel</button>
+      <button type="reset" class="btn btn-secondary h-auto w-auto" th:data-url="${cancelUrl}"
+              onclick="navigateToUrl(this)">Cancel</button>
     </div>
   </form>
 </div>
@@ -166,48 +173,63 @@
 <script src="assets/js/moment.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
 <script>
+  function steperror(){
+var error=$("#stepError").val();
+if(error!=""&&error!=null){
+alert(error);
 
-  function toggleSurveyApproval(that) {
+history.back();
+}
+}
+
+  function navigateToUrl(button) {
+          const url = button.getAttribute('data-url');
+          if (url) {
+              window.location.href = url;
+          }
+      }
+
+function toggleSurveyApproval(that) {
 const status = that.value;
 const RejectRemarkrow = document.getElementById('rejectRemarkrow');
 
 if (status === '2') {
-    rejectRemarkrow.style.display = 'flex';
+  rejectRemarkrow.style.display = 'flex';
 } else {
-    const rejectRemarkInput = document.getElementById('rejectRemark');
-    if (rejectRemarkInput) {
-        rejectRemarkInput.value = '';
-    }
-    rejectRemarkrow.style.display = 'none';
+  const rejectRemarkInput = document.getElementById('rejectRemark');
+  if (rejectRemarkInput) {
+      rejectRemarkInput.value = '';
+  }
+  rejectRemarkrow.style.display = 'none';
 }
 }
 function limitDigits(input, maxDigits) {
- if (input.value.length > maxDigits) {
-   input.value = input.value.slice(0, maxDigits);
- }
+if (input.value.length > maxDigits) {
+ input.value = input.value.slice(0, maxDigits);
+}
 }
 
-      <!-- survey Unit-->
+    <!-- survey Unit-->
 $("#surveyUnit").autocomplete({
-      source: function(request, response) {
-          $.ajax({
-              url: "/searchuserDetails",
-              data: { query: request.term },
-              success: function(data) {
-                  response(data.map(item => ({
-                      label: item.supplier,
-                      value: item.suplierId
-                  })));
-              }
-          });
-      },
-      minLength: 2,
-      select: function(event, ui) {
-          $("#surveyUnit").val(ui.item.label);
-          $("#surveyUnit_id").val(ui.item.value);
-          return false;
-      }
-  });
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchuserDetails",
+            data: { query: request.term },
+            success: function(data) {
+                response(data.map(item => ({
+                    label: item.supplier,
+                    value: item.suplierId
+                })));
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        $("#surveyUnit").val(ui.item.label);
+        $("#surveyUnit_id").val(ui.item.value);
+        return false;
+    }
+});
 
 
 </script>

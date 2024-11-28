@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 
 @Getter
 @Setter
@@ -32,6 +34,51 @@ public class TenderPreparation {
     private String checklistPreparedByLastDate;
     private String technicalPreparedByLastDate;
     private String financialPreparedByLastDate;
+
+
+    private String userId;
+
+    @Column(name = "insert_date_time", updatable = false)
+    private LocalDateTime insertDateTime;
+
+    @Column(name = "update_date_time")
+    private LocalDateTime updateDateTime;
+
+    @PrePersist
+    protected void onCreate() {
+        insertDateTime = LocalDateTime.now(); // Set the insert timestamp
+        updateDateTime = insertDateTime; // Initially set update timestamp the same as insert
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDateTime = LocalDateTime.now(); // Set the update timestamp on updates
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public LocalDateTime getInsertDateTime() {
+        return insertDateTime;
+    }
+
+    public void setInsertDateTime(LocalDateTime insertDateTime) {
+        this.insertDateTime = insertDateTime;
+    }
+
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -88,8 +135,6 @@ public class TenderPreparation {
     // Constructors
     public TenderPreparation() {
     }
-
-
 
     public TenderPreparation(String checklistPreparedBy, String technicalPreparedBy, String financialPreparedBy) {
         this.checklistPreparedBy = checklistPreparedBy;

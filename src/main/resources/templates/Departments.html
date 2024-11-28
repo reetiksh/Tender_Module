@@ -34,13 +34,17 @@
     <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
 <title> Departments </title>
 </head>
-<body  layout:fragment="content">
+<body  layout:fragment="content" onload="steperror()">
 <div class="container">
     <h2 th:text="'Tender Response - ' + ${departmentName}"></h2>
 
 <form action="#" th:action="@{'/department/' + ${departmentName} + '/tender/' + ${tender.id} + '/save'}" method="post" th:object="${departmentResponse}" class="p-3" enctype="multipart/form-data" onsubmit="return validateForm()">
 
-<div class="row mb-2 mt-5">
+    <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId"  ></div>
+    <input type="hidden" id="stepError" th:value="${stepError}">
+
+
+    <div class="row mb-2 mt-5">
     <div class="col-md-3">
         <label for="status">Tender status:</label>
     </div>
@@ -70,9 +74,10 @@
         <textarea id="remarks" name="remarks" th:field="*{remarks}" rows="7" cols="35" placeholder="Enter any additional remarks here..." required></textarea>    </div>
 </div>
     <div class="row justify-content-center mt-4">
-        <button type="submit" name="action" class="btn btn-primary h-auto w-auto">Submit</button>
-        <button type="submit" name="action" value="saveDraft" class="btn btn-primary  h-auto w-auto">Save Draft</button>
-        <a th:href="@{'/tenders'}" class="btn btn-secondary  h-auto w-auto">Cancel</a>
+        <button type="submit" name="action" class="btn btn-primary h-auto w-auto mr-2">Submit</button>
+        <button type="submit" name="action" value="saveDraft" class="btn btn-primary  h-auto w-auto ml-2">Save Draft</button>
+        <button type="reset" class="btn btn-secondary  h-auto w-auto" th:data-url="${cancelUrl}"
+                onclick="navigateToUrl(this)" >Cancel</button>
 
 
     </div>
@@ -90,5 +95,22 @@
 <!-- Datetimepicker JS -->
 <script src="assets/js/moment.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+<script>
+    function steperror(){
+var error=$("#stepError").val();
+if(error!=""&&error!=null){
+alert(error);
+
+history.back();
+}
+}
+
+   function navigateToUrl(button) {
+         const url = button.getAttribute('data-url');
+         if (url) {
+             window.location.href = url;
+         }
+     }
+</script>
 </body>
 </html>

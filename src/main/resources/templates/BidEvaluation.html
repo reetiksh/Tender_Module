@@ -32,7 +32,7 @@
     <!-- Datetimepicker CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
 </head>
-<body layout:fragment="content">
+<body layout:fragment="content" onload="steperror()">
 <div class="container mt-5">
     <h2>Bid Evaluation Form</h2>
 
@@ -48,13 +48,12 @@
             </div>
         </div>
 
-
+     <div>  <input type="hidden" th:value="${userId}"   id="userId" name="userId"  ></div>
+        <input type="hidden" id="stepError" th:value="${stepError}">
         <!-- Technical Evaluation -->
         <div class="row mb-2">
             <div class="col-md-3">
                 <label for="technicalStatus">Technical Evaluation</label>
-                <label th:text="${tender.eligibility}"></label>
-
             </div>
             <div class="col-md-3" th:if="${bidEvaluation != null}">
                 <select id="technicalStatus" name="technicalStatus"  class="form-control"  onchange="togglePaymentFields(this)" required>
@@ -151,7 +150,7 @@
                 <tr>
                     <td></td> <!-- Serial number will be set by updateTable() -->
                     <td><input type="text" id="participantName" name="participantName" maxlength="50" class="form-control" required></td>
-                    <td><input type="number" id="participantRank"  name="participantRank" maxlength="15" class="form-control" required></td>
+                    <td><input type="number" id="participantRank"  name="participantRank" maxlength="15" class="form-control" onchange="validateRank(this)" required></td>
                     <td><input type="number" id="quotedRates"  name="quotedRates" maxlength="15" class="form-control" required></td>
                     <td>
                         <select name="quotedRateType" class="form-control" required>
@@ -225,7 +224,8 @@
         <!-- Submit and Cancel Buttons -->
         <div class="row justify-content-center mt-4">
             <button type="submit" class="btn btn-primary h-auto w-auto">Submit</button>
-            <button type="reset" class="btn btn-secondary h-auto w-auto" onclick="window.location.href='/bid-evaluationlist'">Cancel</button>
+            <button type="reset" class="btn btn-secondary h-auto w-auto" th:data-url="${cancelUrl}"
+                    onclick="navigateToUrl(this)">Cancel</button>
         </div>
     </form>
 </div>
@@ -242,118 +242,153 @@
 <script src="assets/js/moment.min.js"></script>
 <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
 <script>
-    function addRow() {
-       const tableBody = document.querySelector("#participantsTable tbody");
-       const newRow = document.createElement("tr");
-       newRow.innerHTML = `
-         <td></td> <!-- Serial number will be set by updateTable() -->
-         <td><input type="text" name="participantName" maxlength="50" class="form-control" required></td>
-         <td><input type="number" name="participantRank" maxlength="15" class="form-control" required></td>
-         <td><input type="number" name="quotedRates" maxlength="15" class="form-control" required></td>
-         <td>
-           <select name="quotedRateType" class="form-control" required>
-             <option value="" disabled selected>Select...</option>
-             <option value="At Par">At Par</option>
-             <option value="At Below">At Below</option>
-             <option value="At Above">At Above</option>
-           </select>
-         </td>
-         <td></td> <!-- Action cell will be set by updateTable() -->
-       `;
-       tableBody.appendChild(newRow);
-       updateTable();
-     }
 
-     function removeRow(button) {
-       button.closest("tr").remove();
-       updateTable();
-     }
+    function steperror(){
+var error=$("#stepError").val();
+if(error!=""&&error!=null){
+alert(error);
 
-     function updateTable() {
-       const rows = document.querySelectorAll("#participantsTable tbody tr");
-       rows.forEach((row, index) => {
-         // Update serial number
-         row.cells[0].textContent = index + 1;
-
-         // Update action cell
-         const actionCell = row.cells[5]; // Since action is the 6th column (index starts at 0)
-         actionCell.innerHTML = '';
-
-         if (index === rows.length - 1) {
-           // Last row gets "Add Row" button
-           actionCell.innerHTML = `<button type="button" class="btn btn-success" onclick="addRow()">Add Row</button>`;
-         } else {
-           // Other rows get "Remove" button
-           actionCell.innerHTML = `<button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>`;
-         }
-       });
-     }
-
-     // Initialize the table on page load
-     document.addEventListener("DOMContentLoaded", function() {
-       updateTable();
-
-       // Initialize toggle fields based on existing data
-       const technicalStatusSelect = document.getElementById("technicalStatus");
-       if (technicalStatusSelect && technicalStatusSelect.value !== "") {
-         togglePaymentFields(technicalStatusSelect);
-       }
-
-       const financialStatusSelect = document.getElementById("financialStatus");
-       if (financialStatusSelect && financialStatusSelect.value !== "") {
-         togglePaymentFields(financialStatusSelect);
-       }
-
-       const awardedSelect = document.getElementById("awarded");
-       if (awardedSelect && awardedSelect.value !== "") {
-         toggleAwardedFields(awardedSelect);
-       }
-     });
-
-     function togglePaymentFields(that) {
-       const status = that.value;
-       const componentid = that.id.split("Status")[0];
-       var t = componentid + 'disqualifyreasonrow';
-       const disqualifyReasonRow = document.getElementById(t);
-
-       if (disqualifyReasonRow) {
-         if (status === '1') {
-           disqualifyReasonRow.style.display = 'flex';
-           document.getElementById('ourRankdisqualifyreasonrow').style.display = 'none';
-         } else if (status === '0' && componentid == "financial") {
-           document.getElementById('ourRankdisqualifyreasonrow').style.display = 'flex';
-           disqualifyReasonRow.style.display = 'none';
-         } else {
-           const disqualifyReasonInput = document.getElementById(componentid + 'DisqualifyReason');
-           if (disqualifyReasonInput) {
-             disqualifyReasonInput.value = ''; // Clear value if input exists
-           }
-           disqualifyReasonRow.style.display = 'none';
-           document.getElementById('ourRankdisqualifyreasonrow').style.display = 'none';
-         }
-       }
-     }
-
-    function toggleAwardedFields(that) {
-    const status = that.value;
-    const awardedCompanyNameRow = document.getElementById('awardedCompanyNamerow');
-
-    if (status === '2') {
-        awardedCompanyNameRow.style.display = 'flex';
-    } else {
-        const awardedCompanyNameInput = document.getElementById('awardedCompanyName');
-        if (awardedCompanyNameInput) {
-            awardedCompanyNameInput.value = '';
-        }
-        awardedCompanyNameRow.style.display = 'none';
-    }
+history.back();
+}
 }
 
-     function limitDigits(input, maxDigits) {
-       if (input.value.length > maxDigits) {
-         input.value = input.value.slice(0, maxDigits);
-       }
+  function navigateToUrl(button) {
+        const url = button.getAttribute('data-url');
+        if (url) {
+            window.location.href = url;
+        }
+    }
+
+function addRow() {
+   const tableBody = document.querySelector("#participantsTable tbody");
+   const newRow = document.createElement("tr");
+   newRow.innerHTML = `
+     <td></td> <!-- Serial number will be set by updateTable() -->
+     <td><input type="text" name="participantName" maxlength="50" class="form-control" required></td>
+     <td><input type="number" name="participantRank" maxlength="15" class="form-control" onchange="validateRank(this)" required></td>
+     <td><input type="number" name="quotedRates" maxlength="15" class="form-control" required></td>
+     <td>
+       <select name="quotedRateType" class="form-control" required>
+         <option value="" disabled selected>Select...</option>
+         <option value="At Par">At Par</option>
+         <option value="At Below">At Below</option>
+         <option value="At Above">At Above</option>
+       </select>
+     </td>
+     <td></td> <!-- Action cell will be set by updateTable() -->
+   `;
+   tableBody.appendChild(newRow);
+   updateTable();
+ }
+
+ function removeRow(button) {
+   button.closest("tr").remove();
+   updateTable();
+ }
+
+ function updateTable() {
+   const rows = document.querySelectorAll("#participantsTable tbody tr");
+   rows.forEach((row, index) => {
+     // Update serial number
+     row.cells[0].textContent = index + 1;
+
+     // Update action cell
+     const actionCell = row.cells[5]; // Since action is the 6th column (index starts at 0)
+     actionCell.innerHTML = '';
+
+     if (index === rows.length - 1) {
+       // Last row gets "Add Row" button
+       actionCell.innerHTML = `<button type="button" class="btn btn-success" onclick="addRow()">Add Row</button>`;
+     } else {
+       // Other rows get "Remove" button
+       actionCell.innerHTML = `<button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>`;
      }
+   });
+ }
+
+ // Initialize the table on page load
+ document.addEventListener("DOMContentLoaded", function() {
+   updateTable();
+
+   // Initialize toggle fields based on existing data
+   const technicalStatusSelect = document.getElementById("technicalStatus");
+   if (technicalStatusSelect && technicalStatusSelect.value !== "") {
+     togglePaymentFields(technicalStatusSelect);
+   }
+
+   const financialStatusSelect = document.getElementById("financialStatus");
+   if (financialStatusSelect && financialStatusSelect.value !== "") {
+     togglePaymentFields(financialStatusSelect);
+   }
+
+   const awardedSelect = document.getElementById("awarded");
+   if (awardedSelect && awardedSelect.value !== "") {
+     toggleAwardedFields(awardedSelect);
+   }
+ });
+
+ function togglePaymentFields(that) {
+   const status = that.value;
+   const componentid = that.id.split("Status")[0];
+   var t = componentid + 'disqualifyreasonrow';
+   const disqualifyReasonRow = document.getElementById(t);
+
+   if (disqualifyReasonRow) {
+     if (status === '1') {
+       disqualifyReasonRow.style.display = 'flex';
+       document.getElementById('ourRankdisqualifyreasonrow').style.display = 'none';
+     } else if (status === '0' && componentid == "financial") {
+       document.getElementById('ourRankdisqualifyreasonrow').style.display = 'flex';
+       disqualifyReasonRow.style.display = 'none';
+     } else {
+       const disqualifyReasonInput = document.getElementById(componentid + 'DisqualifyReason');
+       if (disqualifyReasonInput) {
+         disqualifyReasonInput.value = ''; // Clear value if input exists
+       }
+       disqualifyReasonRow.style.display = 'none';
+       document.getElementById('ourRankdisqualifyreasonrow').style.display = 'none';
+     }
+   }
+ }
+
+function toggleAwardedFields(that) {
+const status = that.value;
+const awardedCompanyNameRow = document.getElementById('awardedCompanyNamerow');
+
+if (status === '2') {
+    awardedCompanyNameRow.style.display = 'flex';
+} else {
+    const awardedCompanyNameInput = document.getElementById('awardedCompanyName');
+    if (awardedCompanyNameInput) {
+        awardedCompanyNameInput.value = '';
+    }
+    awardedCompanyNameRow.style.display = 'none';
+}
+}
+
+ function limitDigits(input, maxDigits) {
+   if (input.value.length > maxDigits) {
+     input.value = input.value.slice(0, maxDigits);
+   }
+ }
+
+function validateRank(input) {
+const enteredRank = input.value.trim();
+if (enteredRank === '') return; // Do nothing if input is empty
+
+// Get all rank inputs
+const rankInputs = document.querySelectorAll('#participantsTable tbody input[name="participantRank"]');
+
+for (let rankInput of rankInputs) {
+    if (rankInput !== input && rankInput.value.trim() === enteredRank) {
+        alert('This rank is already taken. Please enter a unique rank.');
+        input.value = ''; // Clear the input
+        input.focus();    // Bring focus back to the input
+        return;
+    }
+}
+}
+
 </script>
 </body>
 </html>

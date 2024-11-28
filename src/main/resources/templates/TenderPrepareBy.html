@@ -17,7 +17,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
-<body layout:fragment="content">
+<body layout:fragment="content" onload="steperror()">
 
 <h1>Allocation of Tender to Prepare</h1>
 <div class="container mt-5">
@@ -28,6 +28,9 @@
 
     <!-- Tender Preparation Form -->
     <form th:action="@{/savetenderprepare}" th:object="${TenderPreparation}" method="post" class="needs-validation">
+
+        <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId"  ></div>
+        <input type="hidden" id="stepError" th:value="${stepError}">
 
         <div class="row mb-2"  th:object="${tender}">
             <div class="col-md-3">
@@ -79,8 +82,9 @@
         <!-- Submit and Cancel Buttons -->
         <div class="form-group row">
             <div class="text-center">
-                <button type="submit" class="btn btn-primary me-2">Submit</button>
-                <a th:href="@{'/tender/prepare'}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary h-auto w-auto ">Submit</button>
+                <button type="reset" class="btn btn-secondary h-auto w-auto" th:data-url="${cancelUrl}"
+                        onclick="navigateToUrl(this)" >Cancel</button>
             </div>
         </div>
     </form>
@@ -88,96 +92,114 @@
 
 <!-- JavaScript for Autocomplete and Validation -->
 <script>
-    // Autocomplete for checklistPreparedBy
-    $("#checklistPreparedBy").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchuserDetails",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#checklistPreparedBy").val(ui.item.label);
-            $("#checklistPreparedById").val(ui.item.value);
-            return false;
-        }
-    });
 
-    // Autocomplete for technicalPreparedBy
-    $("#technicalPreparedBy").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchuserDetails",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#technicalPreparedBy").val(ui.item.label);
-            $("#technicalPreparedById").val(ui.item.value);
-            return false;
-        }
-    });
+    function navigateToUrl(button) {
+          const url = button.getAttribute('data-url');
+          if (url) {
+              window.location.href = url;
+          }
+      }
 
-    // Autocomplete for financialPreparedBy
-    $("#financialPreparedBy").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: "/searchuserDetails",
-                data: { query: request.term },
-                success: function(data) {
-                    response(data.map(item => ({
-                        label: item.supplier,
-                        value: item.suplierId
-                    })));
-                }
-            });
-        },
-        minLength: 2,
-        select: function(event, ui) {
-            $("#financialPreparedBy").val(ui.item.label);
-            $("#financialPreparedById").val(ui.item.value);
-            return false;
-        }
-    });
 
-    // Form validation for required date fields
-    document.addEventListener("DOMContentLoaded", function() {
-        document.querySelector("form").addEventListener("submit", function(event) {
-            let isValid = true;
+  // Autocomplete for checklistPreparedBy
+  $("#checklistPreparedBy").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchuserDetails",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#checklistPreparedBy").val(ui.item.label);
+          $("#checklistPreparedById").val(ui.item.value);
+          return false;
+      }
+  });
 
-            // Check each date field for validity
-            const dateFields = ["#checklistPreparedByLastDate", "#technicalPreparedByLastDate", "#financialPreparedByLastDate"];
-            dateFields.forEach(function(fieldId) {
-                const field = document.querySelector(fieldId);
-                if (!field.value) {
-                    field.classList.add("is-invalid");
-                    isValid = false;
-                } else {
-                    field.classList.remove("is-invalid");
-                }
-            });
+  // Autocomplete for technicalPreparedBy
+  $("#technicalPreparedBy").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchuserDetails",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#technicalPreparedBy").val(ui.item.label);
+          $("#technicalPreparedById").val(ui.item.value);
+          return false;
+      }
+  });
 
-            // Prevent form submission if any date field is invalid
-            if (!isValid) {
-                event.preventDefault();
-                alert("Please fill in all required date fields.");
-            }
-        });
-    });
+  // Autocomplete for financialPreparedBy
+  $("#financialPreparedBy").autocomplete({
+      source: function(request, response) {
+          $.ajax({
+              url: "/searchuserDetails",
+              data: { query: request.term },
+              success: function(data) {
+                  response(data.map(item => ({
+                      label: item.supplier,
+                      value: item.suplierId
+                  })));
+              }
+          });
+      },
+      minLength: 2,
+      select: function(event, ui) {
+          $("#financialPreparedBy").val(ui.item.label);
+          $("#financialPreparedById").val(ui.item.value);
+          return false;
+      }
+  });
+
+  // Form validation for required date fields
+  document.addEventListener("DOMContentLoaded", function() {
+      document.querySelector("form").addEventListener("submit", function(event) {
+          let isValid = true;
+
+          // Check each date field for validity
+          const dateFields = ["#checklistPreparedByLastDate", "#technicalPreparedByLastDate", "#financialPreparedByLastDate"];
+          dateFields.forEach(function(fieldId) {
+              const field = document.querySelector(fieldId);
+              if (!field.value) {
+                  field.classList.add("is-invalid");
+                  isValid = false;
+              } else {
+                  field.classList.remove("is-invalid");
+              }
+          });
+
+          // Prevent form submission if any date field is invalid
+          if (!isValid) {
+              event.preventDefault();
+              alert("Please fill in all required date fields.");
+          }
+      });
+  });
+
+    function steperror(){
+     var error=$("#stepError").val();
+     if(error!=""&&error!=null){
+     alert(error);
+
+    history.back();
+    }
+    }
 </script>
 
 <!-- Additional JavaScript -->

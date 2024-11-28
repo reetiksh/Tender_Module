@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 
-
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -69,6 +69,49 @@ public class FeeApproval {
     private String ProcessingFeeReceiveDate;
     @Length(max = 20)
     private String ProcessingFeeModeOfPayment;
+
+    private String userId;
+
+    @Column(name = "insert_date_time", updatable = false)
+    private LocalDateTime insertDateTime;
+
+    @Column(name = "update_date_time")
+    private LocalDateTime updateDateTime;
+
+    @PrePersist
+    protected void onCreate() {
+        insertDateTime = LocalDateTime.now(); // Set the insert timestamp
+        updateDateTime = insertDateTime; // Initially set update timestamp the same as insert
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateDateTime = LocalDateTime.now(); // Set the update timestamp on updates
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public LocalDateTime getInsertDateTime() {
+        return insertDateTime;
+    }
+
+    public void setInsertDateTime(LocalDateTime insertDateTime) {
+        this.insertDateTime = insertDateTime;
+    }
+
+    public LocalDateTime getUpdateDateTime() {
+        return updateDateTime;
+    }
+
+    public void setUpdateDateTime(LocalDateTime updateDateTime) {
+        this.updateDateTime = updateDateTime;
+    }
 
     public String getEMDFeePending() {
         return EMDFeePending;
@@ -299,6 +342,9 @@ public class FeeApproval {
         this.ProcessingFeeValidity = source.getProcessingFeeValidity();
         this.ProcessingFeeReceiveDate = source.getProcessingFeeReceiveDate();
         this.ProcessingFeeModeOfPayment = source.getProcessingFeeModeOfPayment();
+
+        this.userId = source.getUserId();
+
         // ... Update any additional fields
 
     }

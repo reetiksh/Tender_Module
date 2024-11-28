@@ -9,6 +9,30 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.eryery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <style>
+        #remarksTable {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        #remarksTable th,
+        #remarksTable td {
+            height: 30px; /* Adjust height as needed */
+            padding: 4px 8px; /* Reduce padding */
+            font-size: 14px; /* Optional: Adjust font size */
+        }
+
+        #remarksTable th {
+            background-color: #f8f9fa; /* Optional: Light background for header */
+        }
+
+        #remarksTable td label {
+            margin: 0; /* Remove default margin */
+            line-height: 1; /* Adjust line height */
+        }
+    </style>
+
 </head>
 <body layout:fragment="content">
 <div class="container mt-5">
@@ -22,6 +46,13 @@
                 <input type="hidden" class="form-control" th:value="${tender.id}"  id="tenderNumber" name="tenderNumber" required>
             </div>
         </div>
+
+
+
+
+        <div>  <input type="hidden"  th:value="${userId}"  id="userId" name="userId"  ></div>
+
+
         <!-- EMD Amount -->
         <div class="row mb-3">
             <div class="col-md-2">
@@ -71,7 +102,7 @@
                 <label class=" col-form-label">Bid Validity in Days</label>
             </div>
             <div class="col-md-3">
-                <input type="number" name="bidValidityInDays" id="bidValidityInDays" th:value="${emdMonitoring.bidValidityInDays}" class="form-control" readonly />
+                <input type="text" name="bidValidityInDays" id="bidValidityInDays" th:value="${emdMonitoring.bidValidityInDays}" class="form-control" readonly />
             </div>
         </div>
 
@@ -233,12 +264,12 @@
                 </thead>
                 <tbody>
                 <!-- Existing Remarks -->
-                <tr th:each="remark, indexStat : *{followUpRemarks}">
+                <tr th:each="remark, indexStat : ${followUpRemarkDetailsList}">
                     <td>
-                        <input type="date" onblur="isValidDateFormat(this.id)" th:field="*{followUpRemarks[__${indexStat.index}__].remarkDate}" class="form-control" readonly required/>
+                        <label  th:text="${followUpRemarkDetailsList[__${indexStat.index}__].remarkDate}"  />
                     </td>
                     <td>
-                        <input type="text" th:field="*{followUpRemarks[__${indexStat.index}__].remark}" class="form-control" readonly required/>
+                        <label th:text="${followUpRemarkDetailsList[__${indexStat.index}__].remark}" />
                     </td>
                 </tr>
                 </tbody>
@@ -257,105 +288,103 @@
             <div class="col-md-3">
                 <textarea  class="form-control" name="remark" id="remark" placeholder="Enter follow-up remarks here..."></textarea>
             </div>
-
-            <div class="col-md-2 ml-3">
-                <label class=" col-form-label">Remark Date</label>
-            </div>
-            <div class="col-md-3">
-                <input type="date" onblur="isValidDateFormat(this.id)" name="remarkDate" id="remarkDate" class="form-control"  />
-            </div>
-
         </div>
-
-
-
-
 
         <!-- Submit and Cancel Buttons -->
         <div class="row">
             <div class="col text-center">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-secondary" onclick="window.location.href='/emd-monitoringlist'" >Cancel</button>
+                <button type="reset" class="btn btn-secondary" th:data-url="${cancelUrl}"
+                        onclick="navigateToUrl(this)">Cancel</button>
             </div>
         </div>
     </form>
 </div>
 
 <script>
-    function limitDigits(input, maxDigits) {
-   if (input.value.length > maxDigits) {
-     input.value = input.value.slice(0, maxDigits);
-   }
+
+    function navigateToUrl(button) {
+          const url = button.getAttribute('data-url');
+          if (url) {
+              window.location.href = url;
+          }
+      }
+
+
+  function limitDigits(input, maxDigits) {
+ if (input.value.length > maxDigits) {
+   input.value = input.value.slice(0, maxDigits);
  }
-
-    function toggleVia(that) {
-    const status = that.value;
-    const viaRow = document.getElementById('viarow');
-
-    if (status === '1') {
-        viaRow.style.display = 'flex';
-    } else {
-        const viaInput = document.getElementById('via');
-        if (viaInput) {
-            viaInput.value = '';
-        }
-        viaRow.style.display = 'none';
-    }
 }
-     document.addEventListener("DOMContentLoaded", function() {
-        const refundLetterSentSelect = document.getElementById("refundLetterSent");
-        if (refundLetterSentSelect) {
-            toggleVia(refundLetterSentSelect);
-        }
-    });
 
-  <!--operational branch-->
+  function toggleVia(that) {
+  const status = that.value;
+  const viaRow = document.getElementById('viarow');
 
-$("#operationalBranch").autocomplete({
-      source: function(request, response) {
-          $.ajax({
-              url: "/searchBranchData",
-              data: { query: request.term },
-              success: function(data) {
-                  response(data.map(item => ({
-                      label: item.supplier,
-                      value: item.suplierId
-                  })));
-              }
-          });
-      },
-      minLength: 2,
-      select: function(event, ui) {
-          $("#operationalBranch").val(ui.item.label);
-          $("#operationalBranch_id").val(ui.item.value);
-          return false;
+  if (status === '1') {
+      viaRow.style.display = 'flex';
+  } else {
+      const viaInput = document.getElementById('via');
+      if (viaInput) {
+          viaInput.value = '';
+      }
+      viaRow.style.display = 'none';
+  }
+}
+   document.addEventListener("DOMContentLoaded", function() {
+      const refundLetterSentSelect = document.getElementById("refundLetterSent");
+      if (refundLetterSentSelect) {
+          toggleVia(refundLetterSentSelect);
       }
   });
 
+<!--operational branch-->
 
-       <!-- branch manager -->
+$("#operationalBranch").autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchBranchData",
+            data: { query: request.term },
+            success: function(data) {
+                response(data.map(item => ({
+                    label: item.supplier,
+                    value: item.suplierId
+                })));
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        $("#operationalBranch").val(ui.item.label);
+        $("#operationalBranch_id").val(ui.item.value);
+        return false;
+    }
+});
+
+
+     <!-- branch manager -->
 
 
 $("#branchManager").autocomplete({
-      source: function(request, response) {
-          $.ajax({
-              url: "/searchuserDetails",
-              data: { query: request.term },
-              success: function(data) {
-                  response(data.map(item => ({
-                      label: item.supplier,
-                      value: item.suplierId
-                  })));
-              }
-          });
-      },
-      minLength: 2,
-      select: function(event, ui) {
-          $("#branchManager").val(ui.item.label);
-          $("#branchManager_id").val(ui.item.value);
-          return false;
-      }
-  });
+    source: function(request, response) {
+        $.ajax({
+            url: "/searchuserDetails",
+            data: { query: request.term },
+            success: function(data) {
+                response(data.map(item => ({
+                    label: item.supplier,
+                    value: item.suplierId
+                })));
+            }
+        });
+    },
+    minLength: 2,
+    select: function(event, ui) {
+        $("#branchManager").val(ui.item.label);
+        $("#branchManager_id").val(ui.item.value);
+        return false;
+    }
+});
 
 
 </script>
